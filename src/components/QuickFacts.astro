@@ -1,0 +1,22 @@
+---
+import { quickFacts } from '@/data/site';
+---
+<section aria-label="公園の基本情報" class="mx-auto max-w-7xl px-5 lg:px-8">
+  <div class="grid overflow-hidden rounded-3xl border border-ink/10 bg-white/65 shadow-soft sm:grid-cols-2 lg:grid-cols-3">
+    {quickFacts.map((fact, index) => (
+      <div class:list={[
+        'p-6 sm:p-7',
+        index < quickFacts.length - 1 && 'border-b border-ink/10',
+        index % 2 === 0 && 'sm:border-r',
+        index < 4 && 'lg:border-b',
+        index % 3 !== 2 && 'lg:border-r',
+        index === 3 && 'sm:border-r-0 lg:border-r',
+        index === 4 && 'sm:border-b-0',
+      ]}>
+        <p class="text-xs font-semibold tracking-[0.18em] text-muted">{fact.label}</p>
+        <p class="font-jp-serif mt-2 text-2xl tracking-wider text-ink">{fact.value}</p>
+        <p class="mt-2 text-sm leading-6 text-muted">{fact.note}</p>
+      </div>
+    ))}
+  </div>
+</section>

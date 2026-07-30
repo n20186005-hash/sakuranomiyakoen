@@ -1,0 +1,116 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import PageHero from '@/components/PageHero.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import RestaurantCard from '@/components/RestaurantCard.astro';
+import Notice from '@/components/Notice.astro';
+import { restaurants } from '@/data/site';
+---
+<BaseLayout
+  title="桜ノ宮駅周辺のランチ・グルメ"
+  description="毛馬桜之宮公園の散歩前後に立ち寄りやすい、桜ノ宮駅、OAP、旧桜宮公会堂周辺の町中華、ラーメン、ピッツァ、カレー、ホテルランチを紹介します。"
+>
+  <Breadcrumbs items={[{ label: 'ホーム', href: '/' }, { label: '周辺ランチ' }]} />
+  <PageHero
+    eyebrow="GOURMET AROUND THE PARK"
+    title="歩く前に食べる。歩いたあとに、ひと休み。"
+    description="公園内に常設の飲食店はありません。駅近で手早く、歴史建築でゆっくり、ホテルで落ち着いて。散歩の時間に合わせて選びます。"
+    image="/images/hall.webp"
+    imageSmall="/images/hall-900.webp"
+    imageAlt="レストランとしても使われる旧桜宮公会堂"
+  />
+
+  <section class="mx-auto max-w-7xl px-5 py-12 lg:px-8">
+    <div class="rounded-3xl border border-ink/10 bg-white/65 p-6 shadow-soft sm:p-8">
+      <p class="text-xs font-semibold tracking-[0.2em] text-moss">FILTER BY MOOD</p>
+      <h2 class="font-jp-serif mt-3 text-2xl tracking-wider">今日の食事に近いものを選ぶ</h2>
+      <div class="mt-6 flex flex-wrap gap-3" role="group" aria-label="飲食店を絞り込む">
+        {[
+          ['all', 'すべて'],
+          ['駅近', '駅から近い'],
+          ['ランチ', 'ランチ'],
+          ['夕食', '夕食'],
+          ['子連れ', '家族で'],
+          ['予約', '予約してゆっくり'],
+        ].map(([value, label], index) => (
+          <button
+            type="button"
+            data-filter={value}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+            class:list={[
+              'gourmet-filter rounded-full border px-4 py-2 text-sm font-medium transition',
+              index === 0 ? 'border-moss bg-moss text-white' : 'border-ink/15 bg-paper text-ink hover:bg-white',
+            ]}
+          >{label}</button>
+        ))}
+      </div>
+      <p id="filter-status" class="mt-4 text-xs text-muted" aria-live="polite">6件を表示中</p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-12 lg:px-8">
+    <div id="restaurant-grid" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {restaurants.map((restaurant, index) => <RestaurantCard restaurant={restaurant} index={index} />)}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <SectionHeading
+      eyebrow="THREE AREAS"
+      title="公園のどこを歩くかで、食事のエリアも変わる。"
+    />
+    <div class="mt-10 grid gap-6 lg:grid-cols-3">
+      <article class="rounded-3xl bg-moss-dark p-7 text-white">
+        <p class="text-xs tracking-[0.2em] text-sakura-soft">AREA 01</p>
+        <h2 class="font-jp-serif mt-3 text-2xl tracking-wider">桜ノ宮駅周辺</h2>
+        <p class="mt-4 text-sm leading-7 text-white/70">町中華、ラーメン、ピッツァ。短い散歩の前後や、一人で入りやすい店を探すなら駅周辺へ。</p>
+      </article>
+      <article class="rounded-3xl border border-ink/10 bg-white/65 p-7">
+        <p class="text-xs tracking-[0.2em] text-river-deep">AREA 02</p>
+        <h2 class="font-jp-serif mt-3 text-2xl tracking-wider">OAP・公会堂周辺</h2>
+        <p class="mt-4 text-sm leading-7 text-muted">ホテルや歴史建築のレストラン。席でゆっくり休みたい日、家族、記念日の散歩に向きます。</p>
+      </article>
+      <article class="rounded-3xl border border-ink/10 bg-white/65 p-7">
+        <p class="text-xs tracking-[0.2em] text-gold">AREA 03</p>
+        <h2 class="font-jp-serif mt-3 text-2xl tracking-wider">天満橋・南森町</h2>
+        <p class="mt-4 text-sm leading-7 text-muted">公園南端まで歩いたあとの食事に。選択肢が多く、大阪天満宮や商店街方面へ散歩を続けられます。</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <Notice title="営業時間は訪問当日に確認してください" tone="sakura">
+      <p>個人店の臨時休業、売り切れ、貸切営業、季節メニューにより、掲載内容と異なる場合があります。このページの価格・営業時間は目安として利用してください。</p>
+    </Notice>
+  </section>
+
+<script>
+  const filters = document.querySelectorAll<HTMLButtonElement>('.gourmet-filter');
+  const cards = document.querySelectorAll<HTMLElement>('[data-restaurant]');
+  const status = document.querySelector<HTMLElement>('#filter-status');
+
+  filters.forEach((button) => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter ?? 'all';
+      filters.forEach((item) => {
+        const active = item === button;
+        item.setAttribute('aria-pressed', String(active));
+        item.classList.toggle('bg-moss', active);
+        item.classList.toggle('text-white', active);
+        item.classList.toggle('border-moss', active);
+        item.classList.toggle('bg-paper', !active);
+      });
+
+      let visible = 0;
+      cards.forEach((card) => {
+        const haystack = `${card.dataset.tags ?? ''} ${card.dataset.category ?? ''}`;
+        const show = filter === 'all' || haystack.includes(filter);
+        card.classList.toggle('hidden', !show);
+        if (show) visible += 1;
+      });
+      if (status) status.textContent = `${visible}件を表示中`;
+    });
+  });
+</script>
+</BaseLayout>

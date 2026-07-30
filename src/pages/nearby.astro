@@ -1,0 +1,56 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import PageHero from '@/components/PageHero.astro';
+import AttractionCard from '@/components/AttractionCard.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import Notice from '@/components/Notice.astro';
+import { attractions } from '@/data/site';
+---
+<BaseLayout
+  title="公園と周辺の見どころ"
+  description="毛馬桜之宮公園の大川沿いの桜、桜ノ宮ビーチ、旧桜宮公会堂、泉布観、藤田邸跡公園、藤田美術館を紹介します。"
+>
+  <Breadcrumbs items={[{ label: 'ホーム', href: '/' }, { label: '見どころ' }]} />
+  <PageHero
+    eyebrow="PLACES & HISTORY"
+    title="桜だけではない、大川沿いの物語。"
+    description="水辺の公園に、明治の建築、庭園、現代の美術館が点在します。春以外にも歩きたくなる六つの場所を紹介します。"
+    image="/images/sempukan.webp"
+    imageSmall="/images/sempukan-900.webp"
+    imageAlt="桜の木に囲まれた泉布観"
+  />
+
+  <section class="mx-auto max-w-7xl px-5 py-14 lg:px-8">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {attractions.map((attraction, index) => <AttractionCard attraction={attraction} index={index} />)}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <SectionHeading
+      eyebrow="HOW TO COMBINE"
+      title="場所を点ではなく、一本の散歩にする。"
+      description="立ち寄り先を増やすほど時間が必要です。見学時間と移動時間を分けて考えると、予定を組みやすくなります。"
+    />
+    <div class="mt-10 grid gap-6 lg:grid-cols-3">
+      {[
+        ['30〜45分', '桜＋水辺', '桜ノ宮駅、源八橋、桜並木、桜ノ宮ビーチを中心に。施設見学は入れず、景色に絞ります。'],
+        ['90分', '桜＋建築', '旧桜宮公会堂と泉布観を外観から見て、藤田邸跡公園まで片道で歩きます。'],
+        ['半日', '桜＋建築＋美術', '藤田美術館の鑑賞とランチを加え、天満橋方面までゆっくり歩きます。'],
+      ].map(([time, title, copy]) => (
+        <article class="rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
+          <p class="text-xs font-semibold tracking-[0.18em] text-river-deep">{time}</p>
+          <h2 class="font-jp-serif mt-3 text-2xl tracking-wider">{title}</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">{copy}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <Notice title="施設の公開・営業状況について" tone="river">
+      <p>泉布観の内部公開、旧桜宮公会堂のレストラン利用、藤田美術館の展示・休館日は変更される場合があります。公園は開いていても、施設は同じ時間に利用できるとは限りません。</p>
+    </Notice>
+  </section>
+</BaseLayout>

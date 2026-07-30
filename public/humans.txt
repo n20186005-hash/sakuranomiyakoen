@@ -1,0 +1,4 @@
+毛馬桜之宮公園ガイド
+A private, unofficial visitor guide for walking along the Okawa River in Osaka.
+Built with Astro, Tailwind CSS and Cloudflare Workers.
+Last content review: 2026-07-30

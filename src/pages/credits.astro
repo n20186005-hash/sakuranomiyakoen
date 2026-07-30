@@ -1,0 +1,79 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import Notice from '@/components/Notice.astro';
+import { photoCredits } from '@/data/site';
+---
+<BaseLayout
+  title="写真・情報・サイトについて"
+  description="SakuranomiyaKoen.comの運営方針、非公式サイトであること、写真の著作者とライセンス、情報更新方針を掲載しています。"
+>
+  <Breadcrumbs items={[{ label: 'ホーム', href: '/' }, { label: '写真・情報について' }]} />
+
+  <section class="mx-auto max-w-7xl px-5 pb-10 pt-16 lg:px-8 lg:pt-24">
+    <SectionHeading
+      eyebrow="ABOUT THIS GUIDE"
+      title="写真と情報について"
+      description="このサイトは、毛馬桜之宮公園を歩く人のために制作した非公式ガイドです。外部リンクは、写真ライセンスの表示と必要な出典確認を中心に最小限としています。"
+    />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-12 lg:px-8">
+    <div class="grid gap-6 lg:grid-cols-3">
+      <Notice title="非公式ガイド" tone="sakura">
+        <p>大阪市、鉄道会社、周辺施設、飲食店の公式サイトではありません。名称・ロゴ・施設情報は各権利者に帰属します。</p>
+      </Notice>
+      <Notice title="更新方針" tone="river">
+        <p>基本情報は公開情報をもとに確認しています。営業時間、開花、イベント、工事は変動するため、固定的なリアルタイム情報としては表示しません。</p>
+      </Notice>
+      <Notice title="写真の加工" tone="moss">
+        <p>掲載写真は表示速度に合わせてリサイズ、WebP変換、トリミングを行っています。被写体を追加・削除する生成加工はしていません。</p>
+      </Notice>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <SectionHeading eyebrow="PHOTO CREDITS" title="使用写真とライセンス" />
+    <div class="mt-10 overflow-hidden rounded-3xl border border-ink/10 bg-white/65 shadow-soft">
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[860px] text-left text-sm">
+          <thead class="bg-moss text-white">
+            <tr><th class="px-6 py-4">サイト内ファイル</th><th class="px-6 py-4">作品名</th><th class="px-6 py-4">著作者</th><th class="px-6 py-4">ライセンス</th><th class="px-6 py-4">出典</th></tr>
+          </thead>
+          <tbody class="divide-y divide-ink/10">
+            {photoCredits.map((credit) => (
+              <tr>
+                <td class="px-6 py-5 text-xs text-muted">{credit.file}</td>
+                <td class="px-6 py-5 font-medium text-ink">{credit.title}</td>
+                <td class="px-6 py-5 text-muted">{credit.author}</td>
+                <td class="px-6 py-5 text-muted">{credit.license}</td>
+                <td class="px-6 py-5"><a href={credit.source} target="_blank" rel="license noopener noreferrer" class="font-semibold text-river-deep hover:text-moss">Wikimedia Commons ↗</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="mt-5 text-xs leading-6 text-muted">CC BY-SA写真を加工・再配布する場合は、各ライセンスの表示・継承条件をご確認ください。</p>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <SectionHeading eyebrow="CONTENT SOURCES" title="主な情報確認先" />
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {[
+        ['大阪市の公園案内', '公園の規模、開園、設備、交通、火気ルール'],
+        ['日本政府観光局', '大川沿いの散歩と観光の概要'],
+        ['各文化施設の案内', '藤田美術館、泉布観、造幣局周辺の公開・利用情報'],
+        ['鉄道・地図情報', '駅名、徒歩方向、位置関係の確認'],
+        ['飲食店の営業案内', '営業時間、定休日、予算の目安'],
+        ['Wikimedia Commons', '掲載写真とライセンスの確認'],
+      ].map(([title, copy]) => (
+        <article class="rounded-2xl border border-ink/10 bg-white/65 p-6">
+          <h2 class="font-jp-serif text-lg tracking-wider">{title}</h2>
+          <p class="mt-2 text-sm leading-7 text-muted">{copy}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

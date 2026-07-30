@@ -1,0 +1,34 @@
+---
+type Props = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  image: string;
+  imageSmall?: string;
+  imageAlt: string;
+};
+const { eyebrow, title, description, image, imageSmall, imageAlt } = Astro.props;
+---
+<section class="mx-auto max-w-7xl px-5 pb-14 pt-8 lg:px-8 lg:pb-20">
+  <div class="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+    <div class="reveal">
+      <p class="mb-5 text-xs font-semibold tracking-[0.28em] text-moss">{eyebrow}</p>
+      <h1 class="font-jp-serif text-balance text-4xl leading-[1.28] tracking-[0.04em] text-ink sm:text-5xl lg:text-6xl">
+        {title}
+      </h1>
+      <p class="mt-6 max-w-2xl text-pretty text-base leading-8 text-muted sm:text-lg">{description}</p>
+    </div>
+    <figure class="photo-frame reveal reveal-delay-1 aspect-[16/10] shadow-soft">
+      <img
+        src={image}
+        srcset={imageSmall ? `${imageSmall} 900w, ${image} 1600w` : undefined}
+        sizes="(min-width: 1024px) 55vw, 100vw"
+        width="1600"
+        height="1000"
+        alt={imageAlt}
+        loading="eager"
+        fetchpriority="high"
+      />
+    </figure>
+  </div>
+</section>

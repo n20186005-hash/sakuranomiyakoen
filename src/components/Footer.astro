@@ -1,0 +1,45 @@
+---
+import { site } from '@/data/site';
+---
+<footer class="mt-24 border-t border-ink/10 bg-moss-dark text-white">
+  <div class="mx-auto grid max-w-7xl gap-12 px-5 py-14 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
+    <div>
+      <div class="mb-5 flex items-center gap-3 text-sakura-soft">
+        <span class="sakura-mark" aria-hidden="true"></span>
+        <span class="font-jp-serif text-xl tracking-wider text-white">{site.name}</span>
+      </div>
+      <p class="max-w-md text-sm leading-7 text-white/70">
+        大阪・大川沿いに広がる公園を、歩く人の目線で案内する非公式ガイドです。季節、橋、歴史建築、食事を一つの散歩につなぎます。
+      </p>
+      <p class="mt-5 text-xs leading-6 text-white/50">
+        当サイトは大阪市および各施設の公式サイトではありません。施設の営業・公開状況は変更される場合があります。
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-sm font-semibold tracking-[0.18em] text-sakura-soft">GUIDE</h2>
+      <ul class="mt-5 grid gap-3 text-sm text-white/75">
+        <li><a class="hover:text-white" href="/sakura/">桜の見頃と歩き方</a></li>
+        <li><a class="hover:text-white" href="/course/">時間別の散歩コース</a></li>
+        <li><a class="hover:text-white" href="/access/">駅とアクセス</a></li>
+        <li><a class="hover:text-white" href="/gourmet/">周辺ランチ</a></li>
+        <li><a class="hover:text-white" href="/photo/">写真の撮り方</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="text-sm font-semibold tracking-[0.18em] text-sakura-soft">INFORMATION</h2>
+      <ul class="mt-5 grid gap-3 text-sm text-white/75">
+        <li><a class="hover:text-white" href="/rules/">利用ルール</a></li>
+        <li><a class="hover:text-white" href="/faq/">よくある質問</a></li>
+        <li><a class="hover:text-white" href="/credits/">写真・情報について</a></li>
+        <li><a class="hover:text-white" href="/privacy/">プライバシー</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-white/10">
+    <div class="mx-auto max-w-7xl px-5 py-6 text-xs text-white/45 lg:px-8">
+      <p>© 2026 {site.domain}</p>
+    </div>
+  </div>
+</footer>

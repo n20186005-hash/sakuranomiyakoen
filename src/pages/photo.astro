@@ -1,0 +1,80 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import PageHero from '@/components/PageHero.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import Notice from '@/components/Notice.astro';
+---
+<BaseLayout
+  title="写真スポットと撮影時間"
+  description="毛馬桜之宮公園で桜、大川、橋、船、歴史建築を撮るための時間帯、構図、焦点距離の目安、混雑時の撮影マナーを紹介します。"
+>
+  <Breadcrumbs items={[{ label: 'ホーム', href: '/' }, { label: '写真の撮り方' }]} />
+  <PageHero
+    eyebrow="PHOTO WALK"
+    title="桜、川、橋、船。歩きながら構図を探す。"
+    description="桜だけを大きく写すのではなく、大川と街の関係を残すと、この場所らしい写真になります。時間帯と場所の特徴をまとめました。"
+    image="/images/waterfront.webp"
+    imageSmall="/images/waterfront-900.webp"
+    imageAlt="毛馬桜之宮公園の桜と水辺の風景"
+  />
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <SectionHeading eyebrow="LIGHT & TIME" title="撮りたい景色から時間を選ぶ" />
+    <div class="mt-12 grid gap-6 lg:grid-cols-3">
+      {[
+        ['朝 06:30〜09:00', '遊歩道の奥行き', '人が少なく、桜並木の線を生かしやすい時間。低い光で幹や枝の陰影も出ます。', '35〜50mm'],
+        ['昼 10:00〜15:00', '大川の青と桜', '橋の上や対岸から、川と桜の帯を広く撮影。空を入れすぎず、船が来る瞬間を待つと動きが出ます。', '24〜70mm'],
+        ['夕方 16:00〜日没', '橋と都市の輪郭', '逆光気味の花びら、水面の反射、ビルのシルエット。露出差が大きい日は明るい部分を基準に。', '35〜85mm'],
+      ].map(([time, title, copy, lens]) => (
+        <article class="rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
+          <p class="text-xs font-semibold tracking-[0.18em] text-river-deep">{time}</p>
+          <h2 class="font-jp-serif mt-3 text-2xl tracking-wider">{title}</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">{copy}</p>
+          <p class="mt-5 border-t border-ink/10 pt-4 text-xs text-muted">焦点距離の目安：<strong class="text-ink">{lens}</strong></p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+      <div>
+        <SectionHeading eyebrow="FOUR COMPOSITIONS" title="この場所らしさを残す四つの構図" />
+        <ol class="mt-9 grid gap-6">
+          {[
+            ['桜＋川の曲線', '対岸や橋の上から、桜並木が川に沿って曲がる線を探します。'],
+            ['桜＋船', '船を画面の下部に置くと、川の幅と移動感が伝わります。'],
+            ['桜＋近代建築', '旧桜宮公会堂や泉布観では、花を前景にしすぎず建物の輪郭を残します。'],
+            ['人物＋散歩道', '人物を園路の中央ではなく三分割付近に置き、桜の奥行きと歩く方向を見せます。'],
+          ].map(([title, copy], index) => (
+            <li class="grid grid-cols-[2.5rem_1fr] gap-4">
+              <span class="font-jp-serif grid size-10 place-items-center rounded-full bg-sakura-soft text-moss-dark">{index + 1}</span>
+              <div><h2 class="font-jp-serif text-xl tracking-wider">{title}</h2><p class="mt-2 text-sm leading-7 text-muted">{copy}</p></div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <figure class="photo-frame aspect-[4/3] shadow-soft">
+        <img src="/images/boats.webp" srcset="/images/boats-900.webp 900w, /images/boats.webp 1400w" sizes="(min-width:1024px) 50vw, 100vw" width="1400" height="933" alt="桜並木と船が見える大川の風景" loading="lazy" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <div class="grid gap-6 lg:grid-cols-2">
+      <figure class="photo-frame aspect-[4/3] shadow-soft"><img src="/images/hall.webp" width="1400" height="1050" alt="旧桜宮公会堂の正面" loading="lazy" /></figure>
+      <figure class="photo-frame aspect-[4/3] shadow-soft"><img src="/images/sempukan.webp" width="1400" height="875" alt="桜と泉布観" loading="lazy" /></figure>
+    </div>
+    <div class="mt-8 grid gap-6 lg:grid-cols-2">
+      <div><h2 class="font-jp-serif text-2xl tracking-wider">旧桜宮公会堂</h2><p class="mt-3 text-sm leading-7 text-muted">正面性が強い建物。中央構図で石造の柱を整えるか、樹木を片側に入れて季節感を添えます。</p></div>
+      <div><h2 class="font-jp-serif text-2xl tracking-wider">泉布観</h2><p class="mt-3 text-sm leading-7 text-muted">回廊と柱の反復が特徴。桜と建物の色を両方残すため、白飛びに注意します。</p></div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <Notice title="撮影マナー" tone="sakura">
+      <p>三脚や機材で遊歩道をふさがない、桜の枝を動かさない、私有地や施設の利用者を無断で撮らないことを基本に。婚礼やイベントが行われている施設では、現地スタッフの案内を優先してください。</p>
+    </Notice>
+  </section>
+</BaseLayout>

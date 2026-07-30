@@ -1,0 +1,13 @@
+{
+  "name": "毛馬桜之宮公園ガイド",
+  "short_name": "桜之宮ガイド",
+  "description": "桜・水辺・歴史を歩く、大阪・毛馬桜之宮公園の散歩ガイド。",
+  "lang": "ja",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f3ec",
+  "theme_color": "#435f54",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

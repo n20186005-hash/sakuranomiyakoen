@@ -1,0 +1,19 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+---
+<BaseLayout title="プライバシーポリシー" description="SakuranomiyaKoen.comのアクセス解析、Cookie、外部リンク、個人情報の取り扱いについて。">
+  <Breadcrumbs items={[{ label: 'ホーム', href: '/' }, { label: 'プライバシー' }]} />
+  <section class="mx-auto max-w-4xl px-5 pb-12 pt-16 lg:px-8 lg:pt-24">
+    <SectionHeading eyebrow="PRIVACY POLICY" title="プライバシーポリシー" description="本サイトはログイン、会員登録、投稿機能を持たない静的な観光ガイドです。" />
+    <div class="prose-jp mt-14 grid gap-10 text-sm text-muted">
+      <section><h2 class="text-2xl tracking-wider text-ink">アクセス解析</h2><p class="mt-4">サイト改善のためGoogle Analytics 4を利用しています。閲覧ページ、端末、概算地域などの情報がCookie等を通じて収集される場合があります。氏名やメールアドレスを本サイトが直接収集するものではありません。</p></section>
+      <section><h2 class="text-2xl tracking-wider text-ink">Cookie</h2><p class="mt-4">アクセス解析にCookieが利用される場合があります。ブラウザ設定によりCookieを無効化できますが、一部の計測が行われなくなることがあります。</p></section>
+      <section><h2 class="text-2xl tracking-wider text-ink">写真・入力データ</h2><p class="mt-4">現在、本サイトに写真アップロードや問い合わせフォームはありません。将来ブラウザ内で画像を加工する機能を追加する場合も、サーバーへ送信しない設計を優先します。</p></section>
+      <section><h2 class="text-2xl tracking-wider text-ink">外部リンク</h2><p class="mt-4">地図、写真ライセンスなど必要な範囲で外部サイトへリンクします。外部サイトでのデータ取り扱いは、各サイトの方針に従います。</p></section>
+      <section><h2 class="text-2xl tracking-wider text-ink">免責</h2><p class="mt-4">掲載情報の確認に努めますが、営業時間、交通、開花状況、立入規制などの正確性・継続性を保証するものではありません。現地掲示と公式発表を優先してください。</p></section>
+      <p class="border-t border-ink/10 pt-6 text-xs">本ポリシーは、必要に応じて内容を見直します。</p>
+    </div>
+  </section>
+</BaseLayout>

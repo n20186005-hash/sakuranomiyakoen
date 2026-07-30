@@ -1,0 +1,26 @@
+---
+type Item = { label: string; href?: string };
+type Props = { items: Item[] };
+const { items } = Astro.props;
+const itemList = items.map((item, index) => ({
+  '@type': 'ListItem',
+  position: index + 1,
+  name: item.label,
+  ...(item.href ? { item: new URL(item.href, 'https://sakuranomiyakoen.com').toString() } : {}),
+}));
+---
+<nav aria-label="パンくず" class="mx-auto max-w-7xl px-5 pt-6 text-xs text-muted lg:px-8">
+  <ol class="flex flex-wrap items-center gap-2">
+    {items.map((item, index) => (
+      <li class="flex items-center gap-2">
+        {index > 0 && <span aria-hidden="true">／</span>}
+        {item.href ? <a class="hover:text-ink" href={item.href}>{item.label}</a> : <span aria-current="page">{item.label}</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: itemList,
+})} />

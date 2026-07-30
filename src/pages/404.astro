@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+<BaseLayout title="ページが見つかりません" noindex={true}>
+  <section class="mx-auto flex min-h-[65svh] max-w-5xl items-center px-5 py-20 lg:px-8">
+    <div class="grid w-full gap-10 lg:grid-cols-2 lg:items-center">
+      <div>
+        <p class="font-jp-serif text-7xl text-sakura">404</p>
+        <h1 class="font-jp-serif mt-5 text-4xl leading-snug tracking-wider">この道は、公園の外へ続いているようです。</h1>
+        <p class="mt-5 text-base leading-8 text-muted">URLが変わったか、ページが削除された可能性があります。ホームから散歩を始め直してください。</p>
+        <a href="/" class="mt-8 inline-flex rounded-full bg-moss px-6 py-3 text-sm font-semibold text-white hover:bg-moss-dark">ホームへ戻る</a>
+      </div>
+      <figure class="photo-frame aspect-[4/3] shadow-soft"><img src="/images/waterfront.webp" width="1600" height="1067" alt="毛馬桜之宮公園の桜と水辺" /></figure>
+    </div>
+  </section>
+</BaseLayout>

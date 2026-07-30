@@ -1,0 +1,121 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import PageHero from '@/components/PageHero.astro';
+import StationChooser from '@/components/StationChooser.astro';
+import ParkSchematic from '@/components/ParkSchematic.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import Notice from '@/components/Notice.astro';
+import { site } from '@/data/site';
+const mapUrl = `https://www.google.com/maps/search/?api=1&query=${site.coordinates.lat},${site.coordinates.lng}`;
+---
+<BaseLayout
+  title="アクセス・最寄り駅・駐車場"
+  description="毛馬桜之宮公園へのアクセス。JR桜ノ宮駅、大阪城北詰駅、天満橋駅の使い分け、大阪・新大阪・難波・天王寺からの行き方、駐車場情報を紹介します。"
+>
+  <Breadcrumbs items={[{ label: 'ホーム', href: '/' }, { label: 'アクセス' }]} />
+  <PageHero
+    eyebrow="ACCESS & ENTRANCES"
+    title="目的に合わせて、入口の駅を選ぶ。"
+    description="最も分かりやすいのはJR桜ノ宮駅。庭園や美術館なら大阪城北詰駅、公園南端と造幣局周辺なら天満橋駅が便利です。"
+    image="/images/hero.webp"
+    imageSmall="/images/hero-900.webp"
+    imageAlt="上空から見た大川と毛馬桜之宮公園"
+  />
+
+  <StationChooser />
+
+  <section class="mx-auto max-w-7xl px-5 py-14 lg:px-8">
+    <ParkSchematic />
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-14 lg:px-8">
+    <SectionHeading
+      eyebrow="LOCATION MAP"
+      title="公園の位置を地図で確認"
+      description="毛馬桜之宮公園は大川沿いに広がる公園です。訪れる場所に合わせて、最寄り駅と入口を確認してください。"
+    />
+    <div class="mt-10 overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-soft">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.001155365216!2d135.51884379999998!3d34.7051508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e6b6a01cfa47%3A0x7e309a8b760f77cc!2z5qix5LmL5a6r5YWs5Zut!5e0!3m2!1sja!2sjp!4v1785397849684!5m2!1sja!2sjp"
+        width="600"
+        height="450"
+        class="aspect-[4/3] w-full"
+        style="border:0;"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        title="毛馬桜之宮公園のGoogleマップ"
+      ></iframe>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <SectionHeading
+      eyebrow="FROM OSAKA"
+      title="大阪の主要駅から桜ノ宮駅へ"
+      description="時間は列車種別、乗り換え、待ち時間により変わるため、下記は移動の目安です。"
+    />
+    <div class="mt-12 overflow-hidden rounded-3xl border border-ink/10 bg-white/65 shadow-soft">
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[720px] text-left text-sm">
+          <thead class="bg-moss text-white">
+            <tr>
+              <th class="px-6 py-4 font-medium">出発地</th>
+              <th class="px-6 py-4 font-medium">おすすめ経路</th>
+              <th class="px-6 py-4 font-medium">乗車目安</th>
+              <th class="px-6 py-4 font-medium">到着後</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-ink/10">
+            {[
+              ['大阪・梅田', 'JR大阪環状線 → 桜ノ宮', '約4分', '西口から河岸へ徒歩約3分'],
+              ['新大阪', 'JRで大阪駅 → 環状線へ乗換', '約15〜25分', '乗換時間に余裕を'],
+              ['なんば', '大阪メトロ → 鶴橋などでJR環状線', '約25〜35分', '天満橋から入る方法も'],
+              ['天王寺', 'JR大阪環状線 → 桜ノ宮', '約17分', '乗換なしで便利'],
+              ['関西空港', 'JR関空快速など → 大阪環状線方面', '約70〜90分', '荷物が多い日は駅ロッカーを検討'],
+            ].map((row) => (
+              <tr class="hover:bg-paper/80">
+                {row.map((cell, index) => <td class:list={['px-6 py-5', index === 0 ? 'font-medium text-ink' : 'text-muted']}>{cell}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <div class="grid gap-6 lg:grid-cols-3">
+      {[
+        ['JR桜ノ宮駅', '初めての訪問と短い散歩', '西口から大川へ。源八橋、桜並木、桜ノ宮ビーチが近く、最も迷いにくい入口です。', '/course/#short'],
+        ['JR大阪城北詰駅', '庭園・美術館・大阪城', '藤田美術館と藤田邸跡公園に近く、桜ノ宮駅から歩く片道コースの終点にも便利です。', '/course/#history'],
+        ['天満橋駅', '公園南端・造幣局周辺', '京阪と大阪メトロを利用可能。南から北へ歩く日や、大川周辺で食事を組み合わせる日に。', '/course/#half-day'],
+      ].map(([name, best, copy, href], index) => (
+        <article class="rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
+          <span class="font-jp-serif text-2xl text-sakura">{String(index + 1).padStart(2, '0')}</span>
+          <h2 class="font-jp-serif mt-4 text-2xl tracking-wider">{name}</h2>
+          <p class="mt-3 text-sm font-semibold text-river-deep">{best}</p>
+          <p class="mt-4 text-sm leading-7 text-muted">{copy}</p>
+          <a href={href} class="mt-5 inline-flex text-sm font-semibold text-moss">コースを見る →</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <div class="grid gap-6 lg:grid-cols-2">
+      <Notice title="車・駐車場について" tone="sakura">
+        <p>公園専用駐車場はありません。周辺に時間貸し駐車場はありますが、桜の見頃やイベント日は満車・渋滞が起こりやすいため、公共交通機関がおすすめです。</p>
+      </Notice>
+      <Notice title="自転車で訪れる場合" tone="river">
+        <p>河岸は自転車利用者も多い場所です。歩行者の多い区間では速度を落とし、駐輪禁止区域や現地掲示に従ってください。</p>
+      </Notice>
+    </div>
+    <div class="mt-8 flex justify-center">
+      <a href={mapUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full bg-moss px-7 py-3.5 text-sm font-semibold text-white hover:bg-moss-dark">
+        地図アプリで位置を確認（外部）
+      </a>
+    </div>
+  </section>
+</BaseLayout>
