@@ -1,0 +1,34 @@
+---
+import HomeView from '@/components/views/HomeView.astro';
+import AccessView from '@/components/views/AccessView.astro';
+import FaqView from '@/components/views/FaqView.astro';
+import RulesView from '@/components/views/RulesView.astro';
+import SakuraView from '@/components/views/SakuraView.astro';
+import CourseView from '@/components/views/CourseView.astro';
+import GourmetView from '@/components/views/GourmetView.astro';
+import type { Locale } from '@/i18n/config';
+
+const views: Record<string, any> = {
+  '': HomeView,
+  access: AccessView,
+  faq: FaqView,
+  rules: RulesView,
+  sakura: SakuraView,
+  course: CourseView,
+  gourmet: GourmetView,
+};
+
+export function getStaticPaths() {
+  const langs: Locale[] = ['en', 'zh-tw', 'ko'];
+  const slugs = ['', 'access', 'faq', 'rules', 'sakura', 'course', 'gourmet'];
+  return langs.flatMap((lang) =>
+    slugs.map((slug) => ({ params: { lang, slug }, props: { lang } }))
+  );
+}
+
+const { lang } = Astro.props;
+const { slug } = Astro.params;
+const View = views[slug ?? ''];
+---
+
+{View && <View lang={lang} />}

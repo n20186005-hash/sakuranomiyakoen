@@ -1,60 +1,55 @@
+---
+import { useTranslations } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+const buttons = t('comp.stationChooser.buttons') as [string, string, string][];
+const info = t('comp.stationChooser.info') as Record<string, { label: string; name: string; copy: string; href: string }>;
+const defaultKey = 'sakuranomiya';
+---
 <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8" aria-labelledby="station-title">
   <div class="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:items-start">
     <div>
-      <p class="text-xs font-semibold tracking-[0.25em] text-moss">CHOOSE YOUR ENTRANCE</p>
-      <h2 id="station-title" class="font-jp-serif mt-4 text-3xl leading-snug tracking-wider sm:text-4xl">どの駅から入る？</h2>
-      <p class="mt-5 text-base leading-8 text-muted">公園が長いからこそ、目的に合う駅を選ぶと歩きやすくなります。</p>
+      <p class="text-xs font-semibold tracking-[0.25em] text-moss">{t('comp.stationChooser.eyebrow')}</p>
+      <h2 id="station-title" class="font-jp-serif mt-4 text-3xl leading-snug tracking-wider sm:text-4xl">{t('comp.stationChooser.title')}</h2>
+      <p class="mt-5 text-base leading-8 text-muted">{t('comp.stationChooser.lead')}</p>
     </div>
 
     <div class="grid gap-4 sm:grid-cols-3">
-      <button type="button" class="station-button rounded-3xl border border-ink/10 bg-white/65 ring-2 ring-sakura p-6 text-left shadow-soft transition hover:-translate-y-1 hover:bg-white" data-station="sakuranomiya" aria-pressed="true">
-        <span class="text-xs font-semibold tracking-[0.18em] text-river-deep">JR OSAKA LOOP LINE</span>
-        <span class="font-jp-serif mt-3 block text-2xl tracking-wider">桜ノ宮駅</span>
-        <span class="mt-3 block text-sm leading-6 text-muted">初めて・桜・ビーチ・短時間</span>
-      </button>
-      <button type="button" class="station-button rounded-3xl border border-ink/10 bg-white/65 p-6 text-left shadow-soft transition hover:-translate-y-1 hover:bg-white" data-station="osakajo" aria-pressed="false">
-        <span class="text-xs font-semibold tracking-[0.18em] text-river-deep">JR TOZAI LINE</span>
-        <span class="font-jp-serif mt-3 block text-2xl tracking-wider">大阪城北詰駅</span>
-        <span class="mt-3 block text-sm leading-6 text-muted">藤田美術館・庭園・大阪城</span>
-      </button>
-      <button type="button" class="station-button rounded-3xl border border-ink/10 bg-white/65 p-6 text-left shadow-soft transition hover:-translate-y-1 hover:bg-white" data-station="temmabashi" aria-pressed="false">
-        <span class="text-xs font-semibold tracking-[0.18em] text-river-deep">KEIHAN / OSAKA METRO</span>
-        <span class="font-jp-serif mt-3 block text-2xl tracking-wider">天満橋駅</span>
-        <span class="mt-3 block text-sm leading-6 text-muted">造幣局・公園南端・半日散歩</span>
-      </button>
+      {buttons.map(([line, name, desc], index) => (
+        <button
+          type="button"
+          class:list={[
+            'station-button rounded-3xl border border-ink/10 bg-white/65 p-6 text-left shadow-soft transition hover:-translate-y-1 hover:bg-white',
+            index === 0 && 'ring-2 ring-sakura',
+          ]}
+          data-station={index === 0 ? 'sakuranomiya' : index === 1 ? 'osakajo' : 'temmabashi'}
+          aria-pressed={index === 0 ? 'true' : 'false'}
+        >
+          <span class="text-xs font-semibold tracking-[0.18em] text-river-deep">{line}</span>
+          <span class="font-jp-serif mt-3 block text-2xl tracking-wider">{name}</span>
+          <span class="mt-3 block text-sm leading-6 text-muted">{desc}</span>
+        </button>
+      ))}
     </div>
   </div>
 
   <div id="station-result" class="mt-8 rounded-3xl border border-river/20 bg-river/8 p-6 sm:p-8" aria-live="polite">
     <div class="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-center">
       <div>
-        <p id="station-label" class="text-xs font-semibold tracking-[0.2em] text-river-deep">初めてならここ</p>
-        <h3 id="station-name" class="font-jp-serif mt-2 text-2xl tracking-wider text-ink">JR桜ノ宮駅</h3>
-        <p id="station-copy" class="mt-3 max-w-3xl text-sm leading-7 text-muted">河岸まで近く、源八橋、桜並木、桜ノ宮ビーチを短い移動で楽しめます。西口から大川方面へ。</p>
+        <p id="station-label" class="text-xs font-semibold tracking-[0.2em] text-river-deep">{info[defaultKey].label}</p>
+        <h3 id="station-name" class="font-jp-serif mt-2 text-2xl tracking-wider text-ink">{info[defaultKey].name}</h3>
+        <p id="station-copy" class="mt-3 max-w-3xl text-sm leading-7 text-muted">{info[defaultKey].copy}</p>
       </div>
-      <a id="station-link" href="/course/#short" class="inline-flex items-center justify-center rounded-full bg-moss px-6 py-3 text-sm font-semibold text-white hover:bg-moss-dark">おすすめコース</a>
+      <a id="station-link" href={info[defaultKey].href} class="inline-flex items-center justify-center rounded-full bg-moss px-6 py-3 text-sm font-semibold text-white hover:bg-moss-dark">おすすめコース</a>
     </div>
   </div>
 </section>
 
-<script>
-  const stationInfo = {
-    sakuranomiya: {
-      label: '初めてならここ', name: 'JR桜ノ宮駅',
-      copy: '河岸まで近く、源八橋、桜並木、桜ノ宮ビーチを短い移動で楽しめます。西口から大川方面へ。',
-      href: '/course/#short',
-    },
-    osakajo: {
-      label: '文化施設を中心に', name: 'JR大阪城北詰駅',
-      copy: '藤田美術館と藤田邸跡公園に近い入口。公園を北へ歩く片道ルートや、大阪城と組み合わせる日に便利です。',
-      href: '/course/#history',
-    },
-    temmabashi: {
-      label: '南から北へ歩く', name: '天満橋駅',
-      copy: '造幣局周辺や大川南部から散歩を始めたい日に。京阪と大阪メトロが使え、食事の選択肢も多いエリアです。',
-      href: '/course/#half-day',
-    },
-  } as const;
+<script define:vars={{ info }}>
+  const stationInfo = info;
   const buttons = document.querySelectorAll<HTMLButtonElement>('.station-button');
   const label = document.querySelector<HTMLElement>('#station-label');
   const name = document.querySelector<HTMLElement>('#station-name');
@@ -63,19 +58,19 @@
 
   buttons.forEach((button) => {
     button.addEventListener('click', () => {
-      const key = button.dataset.station as keyof typeof stationInfo;
-      const info = stationInfo[key];
-      if (!info || !label || !name || !copy || !link) return;
+      const key = button.dataset.station;
+      const data = key ? stationInfo[key] : undefined;
+      if (!data || !label || !name || !copy || !link) return;
       buttons.forEach((item) => {
         const active = item === button;
         item.setAttribute('aria-pressed', String(active));
         item.classList.toggle('ring-2', active);
         item.classList.toggle('ring-sakura', active);
       });
-      label.textContent = info.label;
-      name.textContent = info.name;
-      copy.textContent = info.copy;
-      link.href = info.href;
+      label.textContent = data.label;
+      name.textContent = data.name;
+      copy.textContent = data.copy;
+      link.href = data.href;
     });
   });
 </script>

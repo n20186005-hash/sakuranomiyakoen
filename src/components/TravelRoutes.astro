@@ -1,0 +1,38 @@
+---
+import SectionHeading from '@/components/SectionHeading.astro';
+import { audienceRoutes } from '@/data/site';
+import { useTranslations, localize, localePath } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+---
+<section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+  <SectionHeading
+    eyebrow={t('extra.courseTravelEyebrow')}
+    title={t('extra.courseTravelTitle')}
+    description={t('extra.courseTravelDesc')}
+  />
+
+  <div class="mt-12 grid gap-5 lg:grid-cols-3">
+    {
+      audienceRoutes.map((route) => {
+        const r = localize('audienceRoutes', route, lang);
+        return (
+          <article class="rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
+            <h2 class="font-jp-serif text-xl tracking-wider text-ink">{r.title}</h2>
+            <p class="mt-2 text-xs font-medium tracking-wide text-river-deep">{r.pace}</p>
+            <ul class="mt-5 grid gap-3 text-sm leading-7 text-muted">
+              {r.points.map((point: string) => <li class="flex gap-3"><span class="text-moss">・</span><span>{point}</span></li>)}
+            </ul>
+          </article>
+        );
+      })
+    }
+  </div>
+
+  <p class="mt-8 text-center text-sm text-muted">
+    {t('extra.courseTravelRulesLabel')}<a href={localePath('/rules/', lang)} class="text-river-deep underline underline-offset-4 hover:text-river">{t('extra.courseTravelRulesLink')}</a>
+  </p>
+</section>

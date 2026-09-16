@@ -1,0 +1,52 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import PageHero from '@/components/PageHero.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import Notice from '@/components/Notice.astro';
+import { useTranslations } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+const rules = t('rules.rules') as [string, string, string][];
+---
+<BaseLayout lang={lang} title={t('rules.title')} description={t('rules.desc')}>
+  <Breadcrumbs items={[{ label: t('common.home'), href: '/' }, { label: t('rules.crumb') }]} />
+  <PageHero
+    eyebrow={t('rules.heroEyebrow')}
+    title={t('rules.heroTitle')}
+    description={t('rules.heroDesc')}
+    image="/images/beach.webp"
+    imageSmall="/images/beach-900.webp"
+    imageAlt={t('rules.heroTitle')}
+  />
+
+  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {rules.map(([title, label, copy], index) => (
+        <article class="rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
+          <div class="flex items-center justify-between gap-4">
+            <span class="rounded-full bg-sakura-soft px-3 py-1 text-xs font-semibold text-moss-dark">{label}</span>
+            <span class="font-jp-serif text-xl text-sakura/70">{String(index + 1).padStart(2, '0')}</span>
+          </div>
+          <h2 class="font-jp-serif mt-5 text-2xl tracking-wider">{title}</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">{copy}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-5 py-20 lg:px-8">
+    <SectionHeading eyebrow={t('rules.emergencyEyebrow')} title={t('rules.emergencyTitle')} align="center" />
+    <div class="mt-10 grid gap-5 sm:grid-cols-2">
+      <Notice title={t('rules.notice1Title')} tone="river"><p>{t('rules.notice1Body')}</p></Notice>
+      <Notice title={t('rules.notice2Title')} tone="moss"><p>{t('rules.notice2Body')}</p></Notice>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <Notice title={t('rules.notice3Title')} tone="sakura"><p>{t('rules.notice3Body')}</p></Notice>
+  </section>
+</BaseLayout>

@@ -1,0 +1,33 @@
+---
+import SectionHeading from '@/components/SectionHeading.astro';
+import { dataI18n } from '@/i18n/data';
+import { useTranslations } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+
+const base = [
+  { h2: '花の仕組みを知る', p: '染井吉野は一本のクローン品種。樹全体がほぼ同時に咲き、同時に散ります。その仕組みを知ると、儚い開花がより愛おしく感じられます。' },
+  { h2: '生物多様性の拠点', p: '大川には魚や水鳥、水辺の植物が暮らしています。都心にいながら、河川生態系の痕跡を読み取れる、小さな自然との出会いです。' },
+  { h2: '観察のルール', p: '枝を折ったり、花を摘んだり、生き物を持ち帰ったりしないでください。川岸を来た時のままに保つことで、次の人も楽しめます。' },
+  { h2: '防災と水辺', p: '大川は台風時に急激に増水することがあります。立ち入り制限や水位上昇の現場案内に従い、水際から安全な距離をとりましょう。' },
+];
+
+const articles = lang === 'ja' ? base : (dataI18n[lang]?.science ?? base);
+---
+<section class="mx-auto max-w-5xl px-5 py-20 lg:px-8">
+  <SectionHeading eyebrow={t('extra.scienceEyebrow')} title={t('extra.scienceTitle')} description={t('extra.scienceDesc')} />
+
+  <div class="mt-12 grid gap-6 sm:grid-cols-2">
+    {
+      articles.map((article: { h2: string; p: string }) => (
+        <article class="rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
+          <h2 class="font-jp-serif text-xl tracking-wider text-ink">{article.h2}</h2>
+          <p class="mt-4 text-sm leading-8 text-muted">{article.p}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,134 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import PageHero from '@/components/PageHero.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import QuickFacts from '@/components/QuickFacts.astro';
+import WeatherModule from '@/components/WeatherModule.astro';
+import RouteFinder from '@/components/RouteFinder.astro';
+import StationChooser from '@/components/StationChooser.astro';
+import ParkSchematic from '@/components/ParkSchematic.astro';
+import AttractionCard from '@/components/AttractionCard.astro';
+import HistoryStories from '@/components/HistoryStories.astro';
+import GoogleRating from '@/components/GoogleRating.astro';
+import RestaurantCard from '@/components/RestaurantCard.astro';
+import ScienceResponsibility from '@/components/ScienceResponsibility.astro';
+import SourcesSection from '@/components/SourcesSection.astro';
+import Notice from '@/components/Notice.astro';
+import { attractions, restaurants, faq } from '@/data/site';
+import { useTranslations, localizeList, localePath } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+const h = t('home') as Record<string, any>;
+const l = (href: string) => localePath(href, lang);
+const faqPreview = localizeList('faq', faq, lang).slice(0, 4);
+const heroTitle = h.heroTitle as string[];
+---
+<BaseLayout lang={lang} title={h.metaTitle} description={h.metaDescription} locales={['ja', 'en', 'zh-tw', 'ko']}>
+  <Breadcrumbs items={[{ label: t('common.home'), href: '/' }]} />
+
+  <header class="relative">
+    <PageHero eyebrow={h.heroBadge} title={heroTitle.join(' ')} description={h.heroDesc} image="/images/hero.webp" imageSmall="/images/hero-900.webp" imageAlt={h.heroBadge} />
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="flex flex-col items-center gap-4 pt-8 sm:flex-row sm:justify-center">
+        <a href={l('/course/')} class="w-full rounded-full bg-moss px-8 py-3.5 text-center font-medium text-white shadow-soft transition hover:opacity-90">{h.ctaCourse}</a>
+        <a href={l('/access/')} class="w-full rounded-full border border-ink/15 bg-white/70 px-8 py-3.5 text-center font-medium text-ink transition hover:bg-white">{h.ctaAccess}</a>
+      </div>
+    </div>
+    <p class="mt-10 text-center text-xs tracking-[0.3em] text-muted">{h.scrollHint}</p>
+  </header>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <SectionHeading
+      eyebrow={h.aboutEyebrow}
+      title={h.aboutTitle}
+      description={h.aboutDesc}
+    />
+    <p class="mx-auto mt-6 max-w-3xl text-center leading-8 text-muted">{h.aboutP}</p>
+    <div class="mt-8 text-center">
+      <a href="/nearby/" class="inline-flex items-center gap-2 font-medium text-river-deep underline underline-offset-4 hover:text-river">{h.aboutLink} <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-12 lg:px-8">
+    <SectionHeading eyebrow={h.placesEyebrow} title={h.placesTitle} description={h.placesDesc} />
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {attractions.map((attraction, index) => <AttractionCard attraction={attraction} index={index} lang={lang} />)}
+    </div>
+    <div class="mt-8 text-center">
+      <a href="/nearby/" class="inline-flex items-center gap-2 font-medium text-river-deep underline underline-offset-4 hover:text-river">{h.placesLink} <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <QuickFacts lang={lang} />
+
+  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <SectionHeading eyebrow={h.sakuraEyebrow} title={h.sakuraTitle} description={h.sakuraDesc} />
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href={l('/sakura/')} class="rounded-full bg-sakura-soft px-6 py-3 font-medium text-moss-dark transition hover:bg-sakura">{h.sakuraCta1}</a>
+      <a href="/photo/" class="rounded-full border border-ink/15 bg-white/70 px-6 py-3 font-medium text-ink transition hover:bg-white">{h.sakuraCta2}</a>
+    </div>
+  </section>
+
+  <WeatherModule lang={lang} />
+  <RouteFinder lang={lang} />
+  <StationChooser lang={lang} />
+  <ParkSchematic lang={lang} />
+
+  <section class="mx-auto max-w-7xl px-5 py-12 lg:px-8">
+    <SectionHeading eyebrow={h.lunchEyebrow} title={h.lunchTitle} description={h.lunchDesc} />
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      {restaurants.map((restaurant, index) => <RestaurantCard restaurant={restaurant} index={index} lang={lang} />)}
+    </div>
+    <div class="mt-8 text-center">
+      <a href={l('/gourmet/')} class="inline-flex items-center gap-2 font-medium text-river-deep underline underline-offset-4 hover:text-river">{h.lunchLink} <span aria-hidden="true">→</span></a>
+      <p class="mt-6 text-xs text-muted">{h.lunchNote}</p>
+    </div>
+  </section>
+
+  <HistoryStories lang={lang} />
+
+  <section class="mx-auto max-w-7xl px-5 py-12 lg:px-8">
+    <SectionHeading eyebrow={h.faqEyebrow} title={h.faqTitle} />
+    <div class="mt-10 grid gap-4 md:grid-cols-2">
+      {
+        faqPreview.map((item) => (
+          <details class="group rounded-3xl border border-ink/10 bg-white/65 p-6 shadow-soft">
+            <summary class="flex cursor-pointer items-start justify-between gap-4 text-base font-medium text-ink marker:content-none">
+              <span>{item.question}</span>
+              <span class="mt-0.5 text-moss transition-transform group-open:rotate-45" aria-hidden="true">＋</span>
+            </summary>
+            <p class="mt-3 text-sm leading-7 text-muted">{item.answer}</p>
+          </details>
+        ))
+      }
+    </div>
+    <div class="mt-8 text-center">
+      <a href={l('/faq/')} class="inline-flex items-center gap-2 font-medium text-river-deep underline underline-offset-4 hover:text-river">{h.faqLink} <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <GoogleRating lang={lang} />
+  <ScienceResponsibility lang={lang} />
+  <SourcesSection lang={lang} />
+
+  <section class="mx-auto max-w-3xl px-5 py-16 lg:px-8">
+    <Notice title={h.noticeTitle} tone="moss"><p>{h.noticeBody}</p></Notice>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'TouristAttraction',
+    name: '毛馬桜之宮公園',
+    description: h.metaDescription,
+    url: new URL('/', Astro.site).toString(),
+    address: { '@type': 'PostalAddress', addressLocality: 'Osaka', addressCountry: 'JP' },
+    amenityFeature: [
+      { '@type': 'LocationFeatureSpecification', name: '公衆トイレ', value: true },
+      { '@type': 'LocationFeatureSpecification', name: '駐車場', value: false },
+    ],
+  })} />
+</BaseLayout>

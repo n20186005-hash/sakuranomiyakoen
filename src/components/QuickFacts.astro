@@ -1,12 +1,19 @@
 ---
 import { quickFacts } from '@/data/site';
+import { useTranslations, localizeList } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+const facts = localizeList('quickFacts', quickFacts, lang);
 ---
-<section aria-label="公園の基本情報" class="mx-auto max-w-7xl px-5 lg:px-8">
+<section aria-label={t('home.quickFactsLabel')} class="mx-auto max-w-7xl px-5 lg:px-8">
   <div class="grid overflow-hidden rounded-3xl border border-ink/10 bg-white/65 shadow-soft sm:grid-cols-2 lg:grid-cols-3">
-    {quickFacts.map((fact, index) => (
+    {facts.map((fact, index) => (
       <div class:list={[
         'p-6 sm:p-7',
-        index < quickFacts.length - 1 && 'border-b border-ink/10',
+        index < facts.length - 1 && 'border-b border-ink/10',
         index % 2 === 0 && 'sm:border-r',
         index < 4 && 'lg:border-b',
         index % 3 !== 2 && 'lg:border-r',

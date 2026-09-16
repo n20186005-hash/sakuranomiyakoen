@@ -1,0 +1,104 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import PageHero from '@/components/PageHero.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import RestaurantCard from '@/components/RestaurantCard.astro';
+import Notice from '@/components/Notice.astro';
+import { restaurants } from '@/data/site';
+import { useTranslations } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+const filters = t('gourmet.filters') as [string, string][];
+const areas = t('gourmet.areas') as [string, string, string][];
+---
+<BaseLayout lang={lang} title={t('gourmet.title')} description={t('gourmet.desc')}>
+  <Breadcrumbs items={[{ label: t('common.home'), href: '/' }, { label: t('gourmet.crumb') }]} />
+  <PageHero
+    eyebrow={t('gourmet.heroEyebrow')}
+    title={t('gourmet.heroTitle')}
+    description={t('gourmet.heroDesc')}
+    image="/images/hall.webp"
+    imageSmall="/images/hall-900.webp"
+    imageAlt={t('gourmet.heroTitle')}
+  />
+
+  <section class="mx-auto max-w-7xl px-5 py-12 lg:px-8">
+    <div class="rounded-3xl border border-ink/10 bg-white/65 p-6 shadow-soft sm:p-8">
+      <p class="text-xs font-semibold tracking-[0.2em] text-moss">{t('gourmet.filterEyebrow')}</p>
+      <h2 class="font-jp-serif mt-3 text-2xl tracking-wider">{t('gourmet.filterTitle')}</h2>
+      <div class="mt-6 flex flex-wrap gap-3" role="group" aria-label={t('gourmet.filterTitle')}>
+        {filters.map(([value, label], index) => (
+          <button
+            type="button"
+            data-filter={value}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+            class:list={[
+              'gourmet-filter rounded-full border px-4 py-2 text-sm font-medium transition',
+              index === 0 ? 'border-moss bg-moss text-white' : 'border-ink/15 bg-paper text-ink hover:bg-white',
+            ]}
+          >{label}</button>
+        ))}
+      </div>
+      <p id="filter-status" class="mt-4 text-xs text-muted" aria-live="polite">{t('gourmet.filterStatus')}</p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-12 lg:px-8">
+    <div id="restaurant-grid" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {restaurants.map((restaurant, index) => <RestaurantCard restaurant={restaurant} index={index} lang={lang} />)}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <SectionHeading eyebrow={t('gourmet.areasEyebrow')} title={t('gourmet.areasTitle')} />
+    <div class="mt-10 grid gap-6 lg:grid-cols-3">
+      {areas.map(([tag, title, copy]) => (
+        <article class="rounded-3xl border border-ink/10 bg-white/65 p-7">
+          <p class="text-xs tracking-[0.2em] text-river-deep">{tag}</p>
+          <h2 class="font-jp-serif mt-3 text-2xl tracking-wider">{title}</h2>
+          <p class="mt-4 text-sm leading-7 text-muted">{copy}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <Notice title={t('gourmet.noticeTitle')} tone="sakura"><p>{t('gourmet.noticeBody')}</p></Notice>
+  </section>
+
+  <script>
+    const filtersEls = document.querySelectorAll<HTMLButtonElement>('.gourmet-filter');
+    const cards = document.querySelectorAll<HTMLElement>('[data-restaurant]');
+    const status = document.querySelector<HTMLElement>('#filter-status');
+
+    filtersEls.forEach((button) => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter ?? 'all';
+        filtersEls.forEach((item) => {
+          const active = item === button;
+          item.setAttribute('aria-pressed', String(active));
+          item.classList.toggle('bg-moss', active);
+          item.classList.toggle('text-white', active);
+          item.classList.toggle('border-moss', active);
+          item.classList.toggle('bg-paper', !active);
+        });
+
+        let visible = 0;
+        cards.forEach((card) => {
+          const haystack = `${card.dataset.tags ?? ''} ${card.dataset.category ?? ''}`;
+          const show = filter === 'all' || haystack.includes(filter);
+          card.classList.toggle('hidden', !show);
+          if (show) visible += 1;
+        });
+        if (status) {
+          const suffix = status.textContent?.replace(/^[0-9]+/, '');
+          status.textContent = `${visible}${suffix}`;
+        }
+      });
+    });
+  </script>
+</BaseLayout>

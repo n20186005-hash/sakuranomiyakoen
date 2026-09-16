@@ -27,6 +27,7 @@ export type Attraction = {
 };
 
 export type Restaurant = {
+  slug: string;
   name: string;
   category: string;
   station: string;
@@ -47,6 +48,40 @@ export const site = {
     '大阪・大川沿いに広がる毛馬桜之宮公園の非公式ガイド。桜の見頃、アクセス、散歩コース、周辺ランチ、利用ルールを紹介します。',
   coordinates: { lat: 34.7051508, lng: 135.5188438 },
 };
+
+// 単一観光地（毛馬桜之宮公園）の実体情報。SEO テンプレートの変数に対応。
+export const attraction = {
+  fullName: '毛馬桜之宮公園',
+  shortName: '桜之宮公園',
+  city: '大阪市',
+  stateProvince: '大阪府',
+  country: '日本',
+  countryCode: 'JP',
+  postalCode: '534-0027',
+  streetAddress: '都島区中野町12',
+  phone: '+81 6 6912 0650',
+  plusCode: 'PG49+3G 大阪市 日本大阪府',
+};
+
+// Google マップ連携用の URL（共有短縮リンク・埋め込み・レビュー）。
+export const maps = {
+  shareUrl: 'https://maps.app.goo.gl/WqSy28cwQsen5dFHA',
+  embedSrc:
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.001155365216!2d135.51884379999998!3d34.7051508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e6b6a01cfa47%3A0x7e309a8b760f77cc!2z5qix5LmL5a6r5YWs5Zut!5e0!3m2!1sja!2sjp!4v1785397849684!5m2!1sja!2sjp',
+  reviewsUrl: 'https://maps.app.goo.gl/WqSy28cwQsen5dFHA',
+};
+
+// Google マップのユーザー評価。ページ表示専用（JSON-LD には含めない）。
+export const reviews = {
+  rating: 4.2,
+  count: 2614,
+  source: 'Google Maps',
+  syncMonth: '2026年9月',
+  mapsUrl: 'https://maps.app.goo.gl/WqSy28cwQsen5dFHA',
+};
+
+// 自治体・公式観光情報のリンク（E-E-A-T 強化用）。
+export const govtTourismUrl = 'https://parksgreenery.city.osaka.lg.jp/article/parks-sakuranomiya/';
 
 export const quickFacts = [
   { label: '入園料', value: '無料', note: '公園は自由に利用できます' },
@@ -121,6 +156,97 @@ export const routes: Route[] = [
     image: '/images/museum.webp',
     imageAlt: '藤田美術館の現代的な建築',
     suitableFor: ['大阪をゆっくり歩きたい人', '文化施設も見たい人', 'デートや小旅行'],
+  },
+  {
+    slug: 'full-day',
+    title: '水都を丸ごと一日コース',
+    duration: 300,
+    distance: '約9.0km',
+    start: 'JR桜ノ宮駅',
+    end: '天満橋駅',
+    mood: '公園、美術館、旧市街、食を一日でつなぐ',
+    description:
+      '朝の桜並木から始まり、藤田美術館、造幣局、大阪城公園、天満橋の旧市街まで。昼と夜で表情が変わる大川を、急がず一日かけて味わうプランです。',
+    steps: ['桜ノ宮駅（朝の桜並木）', '旧桜宮公会堂', '泉布観', '藤田邸跡公園', '藤田美術館', '造幣局周辺', '大阪城公園', '天満橋（旧市街・食）'],
+    tags: ['一日', '大阪城', '旧市街'],
+    image: '/images/museum.webp',
+    imageAlt: '藤田美術館と大阪城を望む水辺',
+    suitableFor: ['一日たっぷり歩きたい人', '観光と食を組み合わせたい人', '遠方からの小旅行'],
+  },
+];
+
+export type AudienceRoute = {
+  slug: string;
+  title: string;
+  pace: string;
+  points: string[];
+};
+
+export const audienceRoutes: AudienceRoute[] = [
+  {
+    slug: 'family',
+    title: '親子ファミリーにおすすめの歩き方',
+    pace: '短く・平坦に・トイレを意識',
+    points: [
+      '源八橋周辺の往復で、小さい子でも飽きずに桜と大川を楽しめます。',
+      '駅近で戻りやすく、急な雨でもすぐ屋内へ移動できます。',
+      '桜ノ宮ビーチの砂浜で休憩。増水時は水辺へ近づかないよう声かけを。',
+      'トイレは駅と公園内の複数箇所。こまめな休憩でリズムを作ります。',
+    ],
+  },
+  {
+    slug: 'photo',
+    title: '写真・自然を楽しむ歩き方',
+    pace: '朝陽・夕景・夜桜を狙う',
+    points: [
+      '朝の光は東から。源八橋から大川を西へ歩くと、桜と水面が同時に入ります。',
+      '旧桜宮公会堂や泉布観は洋風建築と桜の対比が狙い目。',
+      '夕方以降は桜ノ宮ビーチからの逆光と水面の反射、夜はぼんぼりの灯りを。',
+      '三脚は通路をふさがないよう、混雑時は手持ちや一脚で。',
+    ],
+  },
+  {
+    slug: 'accessible',
+    title: '低体力・バリアフリーの歩き方',
+    pace: '段差を避け・無理なく',
+    points: [
+      '主要な河岸遊歩道は比較的フラットですが、橋への上り下りや園路に段差がある区間も。',
+      '短い30分コースは駅近で往復できるため、体力に無理なく楽しめます。',
+      'ベンチやトイレをこまめに活用し、日影の取れる時間帯を選びます。',
+      'ご家族の付き添いがある日は、大阪城北詰駅側の庭園も組み合わせやすいです。',
+    ],
+  },
+];
+
+export type VisitorService = {
+  title: string;
+  body: string;
+};
+
+export const visitorServices: VisitorService[] = [
+  {
+    title: 'トイレ（WC）',
+    body: '公園内に複数の公衆トイレがあります。桜の見頃やイベント時は混雑するため、駅や周辺施設も活用しましょう。',
+  },
+  {
+    title: '駐車場',
+    body: '公園専用の駐車場はありません。周辺には時間貸し駐車場（コインパーキング）がありますが、花見シーズンやイベント日は満車・渋滞が起こりやすく、公共交通機関がおすすめです。',
+  },
+  {
+    title: '飲食',
+    body: '園内に常設の売店や飲食店はありません。桜ノ宮駅周辺には町中華、ラーメン、洋食、イタリアンなどの飲食店が点在し、OAPや天満橋周辺にも選択があります。',
+  },
+  {
+    title: '宿泊',
+    body: '公園周辺に宿泊施設は多くありませんが、数駅の大阪・梅田、京橋、天満橋周辺にはビジネスホテルからシティホテルまで多彩なタイプがあります。',
+  },
+  {
+    title: '買い物（商超）',
+    body: '園内に売店はないため、飲料や軽食は桜ノ宮駅周辺のコンビニエンスストアやスーパーで。持ち込んだごみは持ち帰りを。',
+  },
+  {
+    title: '給油・充電',
+    body: '周辺にはガソリンスタンドやEV充電ステーションがあります。場所や空き状況はカーナビや各施設の案内でご確認ください。',
   },
 ];
 
@@ -201,6 +327,7 @@ export const attractions: Attraction[] = [
 
 export const restaurants: Restaurant[] = [
   {
+    slug: 'daiou',
     name: '中華料理 大王（ターワン）',
     category: '町中華',
     station: 'JR桜ノ宮駅',
@@ -212,6 +339,7 @@ export const restaurants: Restaurant[] = [
     tags: ['駅近', '一人でも入りやすい', '夜営業'],
   },
   {
+    slug: 'koryu',
     name: 'とんぴととりの光龍益',
     category: 'ラーメン',
     station: 'JR桜ノ宮駅',
@@ -223,6 +351,7 @@ export const restaurants: Restaurant[] = [
     tags: ['人気店', '短時間営業', '平日向け'],
   },
   {
+    slug: 'fortuna',
     name: 'PIZZA FORTUNA',
     category: 'ピッツァ・イタリアン',
     station: 'JR桜ノ宮駅',
@@ -234,6 +363,7 @@ export const restaurants: Restaurant[] = [
     tags: ['デート', '夕食', '予約向け'],
   },
   {
+    slug: 'electro',
     name: 'お出汁とスパイス 元祖エレクトロニカレー',
     category: 'スパイスカレー',
     station: '桜ノ宮・都島エリア',
@@ -245,6 +375,7 @@ export const restaurants: Restaurant[] = [
     tags: ['個性派', 'ランチ', '営業日確認'],
   },
   {
+    slug: 'hall',
     name: '旧桜宮公会堂 レストラン',
     category: '洋食・フレンチ',
     station: 'JR桜ノ宮駅',
@@ -256,6 +387,7 @@ export const restaurants: Restaurant[] = [
     tags: ['歴史建築', '記念日', '予約推奨'],
   },
   {
+    slug: 'coupe',
     name: 'カフェ クベール',
     category: 'ホテルレストラン',
     station: 'OAP・帝国ホテル大阪',

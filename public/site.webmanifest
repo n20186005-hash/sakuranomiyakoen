@@ -1,13 +1,24 @@
 {
+  "id": "/",
   "name": "毛馬桜之宮公園ガイド",
   "short_name": "桜之宮ガイド",
   "description": "桜・水辺・歴史を歩く、大阪・毛馬桜之宮公園の散歩ガイド。",
   "lang": "ja",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#f7f3ec",
   "theme_color": "#435f54",
+  "categories": ["travel", "tourism", "navigation"],
   "icons": [
-    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "散歩コース", "url": "/course/" },
+    { "name": "アクセス", "url": "/access/" },
+    { "name": "周辺ランチ", "url": "/gourmet/" },
+    { "name": "よくある質問", "url": "/faq/" }
   ]
 }

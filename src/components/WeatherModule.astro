@@ -1,0 +1,84 @@
+---
+import SectionHeading from '@/components/SectionHeading.astro';
+import { getWeather, beaufort, buildAdvice } from '@/lib/weather';
+import { useTranslations } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+const w = t('extra.weather') as Record<string, string>;
+
+const weather = await getWeather(lang);
+const advice = weather ? buildAdvice(weather, lang) : null;
+---
+{
+  weather ? (
+    <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+      <SectionHeading eyebrow={w.eyebrow} title={weather.now.label} description={w.today} />
+
+      <div class="mt-10 grid gap-6 lg:grid-cols-3">
+        <article class="rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
+          <p class="text-xs font-semibold tracking-[0.18em] text-muted">{w.today}</p>
+          <p class="font-jp-serif mt-2 text-4xl text-ink">{weather.now.temperature}°</p>
+          <p class="mt-1 text-sm text-river-deep">{w.feel} {weather.now.apparent}°</p>
+          <div class="mt-5 grid grid-cols-2 gap-3 text-sm">
+            <div><span class="text-muted">{w.precip}</span><br /><span class="font-medium text-ink">{weather.days[0].pop}%</span></div>
+            <div><span class="text-muted">{w.wind}</span><br /><span class="font-medium text-ink">{beaufort(weather.now.windSpeed, lang).label}</span></div>
+            {weather.now.uv != null && (
+              <div><span class="text-muted">{w.uvLabel}</span><br /><span class="font-medium text-ink">{weather.now.uv}</span></div>
+            )}
+            <div><span class="text-muted">{w.today} 湿度</span><br /><span class="font-medium text-ink">{weather.now.humidity}%</span></div>
+          </div>
+        </article>
+
+        <article class="rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
+          <p class="text-xs font-semibold tracking-[0.18em] text-muted">{w.ahead}</p>
+          <ul class="mt-4 grid grid-cols-4 gap-2 text-center sm:grid-cols-7 lg:grid-cols-4 xl:grid-cols-7">
+            {
+              weather.days.slice(1, 6).map((day) => (
+                <li class="rounded-xl bg-paper p-3">
+                  <p class="text-xs text-muted">{day.weekday}</p>
+                  <p class="mt-1 text-lg">{day.key === 'sun' ? '☀️' : day.key === 'partly' ? '🌤️' : day.key === 'cloud' ? '☁️' : day.key === 'rain' ? '🌧️' : day.key === 'snow' ? '❄️' : day.key === 'storm' ? '⛈️' : '🌫️'}</p>
+                  <p class="mt-1 text-sm font-medium text-ink">{day.tmax}°</p>
+                  <p class="text-xs text-muted">{day.tmin}°</p>
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+
+        {advice && (
+          <article class="rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
+            <p class="text-xs font-semibold tracking-[0.18em] text-moss">{w.travel}</p>
+            <ul class="mt-3 grid gap-1.5 text-sm text-muted">
+              {advice.travel.map((s: string) => <li>・{s}</li>)}
+            </ul>
+            <p class="mt-4 text-xs font-semibold tracking-[0.18em] text-moss">{w.play}</p>
+            <ul class="mt-3 grid gap-1.5 text-sm text-muted">
+              {advice.play.map((s: string) => <li>・{s}</li>)}
+            </ul>
+            <p class="mt-4 text-xs font-semibold tracking-[0.18em] text-moss">{w.items}</p>
+            <ul class="mt-3 grid gap-1.5 text-sm text-muted">
+              {advice.items.map((s: string) => <li>・{s}</li>)}
+            </ul>
+            {advice.risk.length > 0 && (
+              <>
+                <p class="mt-4 text-xs font-semibold tracking-[0.18em] text-sakura">{w.risk}</p>
+                <ul class="mt-3 grid gap-1.5 text-sm text-sakura">
+                  {advice.risk.map((s: string) => <li>・{s}</li>)}
+                </ul>
+              </>
+            )}
+          </article>
+        )}
+      </div>
+
+      <p class="mt-6 text-xs text-muted">{w.note}</p>
+    </section>
+  ) : (
+    <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+      <SectionHeading eyebrow={w.eyebrow} title={w.error} />
+    </section>
+  )
+}

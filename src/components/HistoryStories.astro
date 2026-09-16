@@ -1,0 +1,62 @@
+---
+import SectionHeading from '@/components/SectionHeading.astro';
+import { dataI18n } from '@/i18n/data';
+import { useTranslations } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+
+type Story = { k: string; t: string; p: string };
+const base: Story[] = [
+  { k: '地名の由来', t: '「毛馬（けま）」という地名', p: '毛馬は、かつて大川（旧淀川）に架かっていた「毛馬の渡し」で知られる土地。上方の水運が盛んだった時代、川の両岸を人と荷をつなぐ渡し場として栄え、周囲は菜園や宿場が広がる土地でした。' },
+  { k: '公園のなりたち', t: '大川と毛馬桜之宮公園', p: '1890年代の淀川改修（北岸の直線化）によって、旧河道が「大川」として残り、両岸の河川敷が憩いの場として整備されました。昭和に入ると桜が植えられ、現在の「毛馬桜之宮公園」の形になります。' },
+  { k: '桜の歴史', t: '約4,800本の桜並木', p: '大正から昭和初期にかけて桜並木が形成され、戦後の復興とともに再植樹が進みました。今では大川の両岸に約4,800本が連なり、大阪を代表する花見の名所となっています。' },
+  { k: '名前の由来', t: '「桜宮（さくらのみや）」の呼び名', p: '旧「桜宮」地区（現在の都島区・北区一帯）に由来します。川岸の桜が宮殿のように美しく連なった姿から名づけられたと伝わります。' },
+  { k: '水運の物語', t: '毛馬の渡しと川岸の暮らし', p: '大川は上方の水運の大動脈でした。毛馬の渡しは、雨の日も強風の日も、人々の移動と暮らしを支え続けました。今も橋と船が行き交う風景に、その歴史を読むことができます。' },
+  { k: 'エピソード', t: '渡しを守った人々', p: '渡しを守った人々の丁寧な仕事ぶりは、当時の記録に残っています。増水や強風の中でも安全を差し置かなかった姿勢は、今の「川岸のマナー」の原点のようにも感じられます。' },
+];
+
+const stories: Story[] = lang === 'ja' ? base : (dataI18n[lang]?.history ?? base);
+---
+<section class="mx-auto max-w-5xl px-5 py-20 lg:px-8">
+  <SectionHeading eyebrow={t('extra.historyEyebrow')} title={t('extra.historyTitle')} description={t('extra.historyDesc')} />
+
+  <div class="mt-12 grid gap-6 md:grid-cols-2">
+    {
+      stories.map((item) => (
+        <article class="reveal rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
+          <p class="text-xs font-semibold tracking-[0.2em] text-moss">{item.k}</p>
+          <h2 class="font-jp-serif mt-3 text-xl tracking-wider text-ink">{item.t}</h2>
+          <p class="mt-4 text-sm leading-8 text-muted">{item.p}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  const items = document.querySelectorAll<HTMLElement>('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  items.forEach((item) => observer.observe(item));
+</script>
+
+<style>
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+</style>

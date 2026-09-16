@@ -1,14 +1,23 @@
 ---
-type Props = { compact?: boolean };
-const { compact = false } = Astro.props;
+import { useTranslations } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { compact?: boolean; lang?: Locale };
+const { compact = false, lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+const places = (t('comp.parkSchematic.places') as [string, string][]).slice(0, compact ? 6 : 7);
+const positions: [number, number][] = [
+  [90, 42], [575, 105], [95, 165], [590, 235], [75, 300], [580, 360], [80, 438],
+];
+const stroke = ['#435f54', '#527b86', '#435f54', '#a98c58', '#435f54', '#a98c58', '#435f54'];
 ---
 <div class="rounded-[2rem] border border-ink/10 bg-white/65 p-4 shadow-soft sm:p-7">
   <div class="mb-4 flex flex-wrap items-center justify-between gap-3 px-2">
     <div>
-      <p class="text-xs font-semibold tracking-[0.18em] text-moss">WALKING SCHEMATIC</p>
-      <h3 class="font-jp-serif mt-1 text-xl tracking-wider">大川沿いの歩き方・概念図</h3>
+      <p class="text-xs font-semibold tracking-[0.18em] text-moss">{t('comp.parkSchematic.eyebrow')}</p>
+      <h3 class="font-jp-serif mt-1 text-xl tracking-wider">{t('comp.parkSchematic.title')}</h3>
     </div>
-    <p class="text-xs text-muted">※縮尺・方位を省略した案内図です</p>
+    <p class="text-xs text-muted">{t('comp.parkSchematic.note')}</p>
   </div>
   <svg viewBox={compact ? '0 0 900 420' : '0 0 900 520'} class="h-auto w-full" role="img" aria-labelledby="map-title map-desc">
     <title id="map-title">毛馬桜之宮公園の散歩ルート概念図</title>
@@ -31,51 +40,13 @@ const { compact = false } = Astro.props;
     <path d="M575 25 C485 95 630 155 530 235 C470 285 555 345 505 430" fill="none" stroke="#e5aeb9" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 15" />
 
     <g font-family="sans-serif" font-size="14" fill="#26312d">
-      <g transform="translate(90 42)">
-        <circle cx="18" cy="18" r="16" fill="#435f54" />
-        <circle cx="18" cy="18" r="5" fill="#f3d9de" />
-        <text x="46" y="15" font-weight="700">JR 桜ノ宮駅</text>
-        <text x="46" y="36" fill="#66716c" font-size="12">短時間コースの入口</text>
-      </g>
-
-      <g transform="translate(575 105)">
-        <circle cx="15" cy="15" r="12" fill="#fff" stroke="#435f54" stroke-width="3" />
-        <text x="38" y="13" font-weight="700">源八橋</text>
-        <text x="38" y="32" fill="#66716c" font-size="12">桜と川の広がり</text>
-      </g>
-
-      <g transform="translate(95 165)">
-        <circle cx="15" cy="15" r="12" fill="#fff" stroke="#527b86" stroke-width="3" />
-        <text x="38" y="13" font-weight="700">桜ノ宮ビーチ</text>
-        <text x="38" y="32" fill="#66716c" font-size="12">親水空間</text>
-      </g>
-
-      <g transform="translate(590 235)">
-        <circle cx="15" cy="15" r="12" fill="#fff" stroke="#a98c58" stroke-width="3" />
-        <text x="38" y="13" font-weight="700">旧桜宮公会堂・泉布観</text>
-        <text x="38" y="32" fill="#66716c" font-size="12">近代建築を歩く</text>
-      </g>
-
-      <g transform="translate(75 300)">
-        <circle cx="15" cy="15" r="12" fill="#fff" stroke="#435f54" stroke-width="3" />
-        <text x="38" y="13" font-weight="700">藤田邸跡公園</text>
-        <text x="38" y="32" fill="#66716c" font-size="12">庭園と休憩</text>
-      </g>
-
-      <g transform="translate(580 360)">
-        <circle cx="15" cy="15" r="12" fill="#fff" stroke="#a98c58" stroke-width="3" />
-        <text x="38" y="13" font-weight="700">藤田美術館</text>
-        <text x="38" y="32" fill="#66716c" font-size="12">大阪城北詰駅に近い</text>
-      </g>
-
-      {!compact && (
-        <g transform="translate(80 438)">
-          <circle cx="18" cy="18" r="16" fill="#435f54" />
-          <circle cx="18" cy="18" r="5" fill="#f3d9de" />
-          <text x="46" y="15" font-weight="700">天満橋駅</text>
-          <text x="46" y="36" fill="#66716c" font-size="12">公園南端・造幣局方面</text>
+      {places.map(([name, sub], i) => (
+        <g transform={`translate(${positions[i][0]} ${positions[i][1]})`}>
+          <circle cx="15" cy="15" r="12" fill="#fff" stroke={stroke[i]} stroke-width="3" />
+          <text x="38" y="13" font-weight="700">{name}</text>
+          <text x="38" y="32" fill="#66716c" font-size="12">{sub}</text>
         </g>
-      )}
+      ))}
     </g>
 
     <g transform="translate(690 455)" font-family="sans-serif" font-size="12" fill="#66716c">

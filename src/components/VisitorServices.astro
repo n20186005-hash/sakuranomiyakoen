@@ -1,0 +1,40 @@
+---
+import SectionHeading from '@/components/SectionHeading.astro';
+import { visitorServices } from '@/data/site';
+import { useTranslations, localizeList } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+const services = localizeList('visitorServices', visitorServices, lang);
+const badges = ['WC', 'P', '食', '泊', '買', '充'];
+---
+
+<section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+  <SectionHeading
+    eyebrow={t('comp.visitorServices.eyebrow')}
+    title={t('comp.visitorServices.title')}
+    description={t('comp.visitorServices.desc')}
+  />
+
+  <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      services.map((service, index) => (
+        <article class="rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
+          <div class="flex items-center gap-4">
+            <span class="grid size-12 shrink-0 place-items-center rounded-2xl bg-moss/10 font-jp-serif text-base font-semibold text-moss">
+              {badges[index] ?? '・'}
+            </span>
+            <h2 class="font-jp-serif text-xl tracking-wider text-ink">{service.title}</h2>
+          </div>
+          <p class="mt-5 text-sm leading-7 text-muted">{service.body}</p>
+        </article>
+      ))
+    }
+  </div>
+
+  <p class="mx-auto mt-8 max-w-3xl text-center text-xs leading-6 text-muted">
+    {t('comp.visitorServices.footnote')}
+  </p>
+</section>

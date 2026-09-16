@@ -1,0 +1,43 @@
+---
+import SectionHeading from '@/components/SectionHeading.astro';
+import { faq as faqJa } from '@/data/site';
+import { useTranslations, localizeList, localePath } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+const faq = localizeList('faq', faqJa, lang);
+---
+
+<SectionHeading eyebrow={t('faq.eyebrow')} title={t('faq.title')} description={t('faq.desc')} />
+
+<div class="mx-auto mt-12 max-w-4xl">
+  <div class="divide-y divide-ink/10 overflow-hidden rounded-3xl border border-ink/10 bg-white/65 shadow-soft">
+    {
+      faq.map((item) => (
+        <details class="group p-6 sm:p-7">
+          <summary class="flex cursor-pointer items-start justify-between gap-5 text-lg font-medium text-ink marker:content-none">
+            <span>{item.question}</span>
+            <span class="mt-1 text-moss transition-transform group-open:rotate-45" aria-hidden="true">＋</span>
+          </summary>
+          <p class="mt-4 leading-7 text-muted">{item.answer}</p>
+        </details>
+      ))
+    }
+  </div>
+
+  <p class="mt-8 text-center text-sm text-muted">
+    {t('extra.faqRulesLead')}<a href={localePath('/rules/', lang)} class="text-river-deep underline underline-offset-4 hover:text-river">{t('extra.faqRulesLink')}</a>
+  </p>
+</div>
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+})} />

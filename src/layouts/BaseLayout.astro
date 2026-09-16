@@ -3,6 +3,8 @@ import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import '@/styles/global.css';
 import { site } from '@/data/site';
+import { useTranslations } from '@/i18n/utils';
+import { locales, localePrefixes, ogLocaleMap, htmlLangMap, type Locale } from '@/i18n/config';
 
 type Props = {
   title?: string;
@@ -11,6 +13,8 @@ type Props = {
   canonical?: string;
   noindex?: boolean;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  lang?: Locale;
+  locales?: Locale[];
 };
 
 const {
@@ -20,14 +24,35 @@ const {
   canonical = new URL(Astro.url.pathname, site.url).toString(),
   noindex = false,
   jsonLd,
+  lang = 'ja',
+  locales: pageLocalesProp,
 } = Astro.props;
+const { t } = useTranslations(lang);
 
 const pageTitle = title ? `${title}｜${site.name}` : `${site.name}｜桜・水辺・歴史を歩く大阪散歩`;
 const absoluteImage = new URL(image, site.url).toString();
 const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+
+// ロケール prefix を除いたベースパスを求め、hreflang 代替リンクを生成
+const pathSegs = Astro.url.pathname.split('/').filter(Boolean);
+const knownPrefixes = (Object.values(localePrefixes) as string[]).filter(Boolean);
+let basePath = Astro.url.pathname;
+if (pathSegs.length && knownPrefixes.includes(pathSegs[0])) {
+  const rest = pathSegs.slice(1);
+  basePath = rest.length ? `/${rest.join('/')}/` : '/';
+}
+const altLocales = (pageLocalesProp ?? locales).filter((l) => locales.includes(l));
+const altLinks = altLocales.map((l) => {
+  const prefix = localePrefixes[l];
+  return {
+    hreflang: l === 'ja' ? 'ja' : l,
+    href: new URL((prefix ? `/${prefix}` : '') + basePath, site.url).toString(),
+  };
+});
+const xDefaultHref = new URL(basePath, site.url).toString();
 ---
 <!doctype html>
-<html lang="ja">
+<html lang={htmlLangMap[lang]}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -36,11 +61,13 @@ const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {altLinks.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/site.webmanifest" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
-    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:locale" content={ogLocaleMap[lang]} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={pageTitle} />
@@ -71,12 +98,19 @@ const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
   </head>
   <body>
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-5 focus:py-3 focus:text-ink focus:shadow-soft">
-      本文へ移動
+      {t('nav.skip')}
     </a>
-    <Header />
+    <Header lang={lang} />
     <main id="main-content">
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>

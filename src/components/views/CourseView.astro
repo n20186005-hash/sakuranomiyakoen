@@ -1,0 +1,47 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import PageHero from '@/components/PageHero.astro';
+import RouteCard from '@/components/RouteCard.astro';
+import ParkSchematic from '@/components/ParkSchematic.astro';
+import Notice from '@/components/Notice.astro';
+import SeasonalStrategy from '@/components/SeasonalStrategy.astro';
+import TravelRoutes from '@/components/TravelRoutes.astro';
+import { routes } from '@/data/site';
+import { useTranslations } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+---
+<BaseLayout lang={lang} title={t('course.title')} description={t('course.desc')}>
+  <Breadcrumbs items={[{ label: t('common.home'), href: '/' }, { label: t('course.crumb') }]} />
+  <PageHero
+    eyebrow={t('course.heroEyebrow')}
+    title={t('course.heroTitle')}
+    description={t('course.heroDesc')}
+    image="/images/bridge.webp"
+    imageSmall="/images/bridge-900.webp"
+    imageAlt={t('course.heroTitle')}
+  />
+
+  <section class="mx-auto max-w-7xl px-5 py-10 lg:px-8"><ParkSchematic lang={lang} /></section>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <div class="grid gap-10">
+      {routes.map((route, index) => <RouteCard route={route} featured={index === 2} lang={lang} />)}
+    </div>
+  </section>
+
+  <TravelRoutes lang={lang} />
+  <SeasonalStrategy lang={lang} />
+
+  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <div class="grid gap-5 lg:grid-cols-3">
+      <Notice title={t('course.notice1Title')} tone="river"><p>{t('course.notice1Body')}</p></Notice>
+      <Notice title={t('course.notice2Title')} tone="moss"><p>{t('course.notice2Body')}</p></Notice>
+      <Notice title={t('course.notice3Title')} tone="sakura"><p>{t('course.notice3Body')}</p></Notice>
+    </div>
+  </section>
+</BaseLayout>

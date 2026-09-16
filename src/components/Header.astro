@@ -1,104 +1,53 @@
 ---
-import { site } from '@/data/site';
-const path = Astro.url.pathname;
-const nav = [
-  { href: '/sakura/', label: '桜の見頃' },
-  { href: '/course/', label: '散歩コース' },
-  { href: '/access/', label: 'アクセス' },
-  { href: '/gourmet/', label: '周辺ランチ' },
-  { href: '/nearby/', label: '見どころ' },
-  { href: '/faq/', label: 'よくある質問' },
-];
-const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+import { useTranslations, localePath } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+const nav = t('nav.main') as Array<{ href: string; label: string }>;
+const hrefFor = (href: string) => (href === '/nearby/' ? href : localePath(href, lang));
 ---
-<header class="sticky top-0 z-50 border-b border-white/40 bg-paper/90 backdrop-blur-xl">
-  <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
-    <a href="/" class="group flex items-center gap-3 no-underline" aria-label={`${site.name} ホーム`}>
-      <span class="grid size-10 place-items-center rounded-full border border-moss/20 bg-white/70 text-sakura shadow-sm transition group-hover:rotate-12" aria-hidden="true">
-        <span class="sakura-mark"></span>
-      </span>
-      <span class="leading-none">
-        <span class="font-jp-serif block text-base tracking-[0.08em] text-ink sm:text-lg">毛馬桜之宮公園</span>
-        <span class="mt-1 block text-[10px] tracking-[0.22em] text-muted">WATERSIDE WALK GUIDE</span>
-      </span>
+<header class="sticky top-0 z-50 border-b border-ink/5 bg-paper/80 backdrop-blur supports-[backdrop-filter]:bg-paper/60">
+  <nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 lg:px-8" aria-label={t('nav.ariaMain')}>
+    <a href={localePath('/', lang)} class="font-jp-serif text-xl tracking-wider text-ink">
+      KEMA<span class="text-moss">桜之宮</span>
     </a>
 
-    <nav class="hidden items-center gap-1 lg:flex" aria-label="メインナビゲーション">
-      {nav.map((item) => (
-        <a
-          href={item.href}
-          aria-current={isActive(item.href) ? 'page' : undefined}
-          class:list={[
-            'rounded-full px-4 py-2 text-sm font-medium tracking-wide transition',
-            isActive(item.href)
-              ? 'bg-moss text-white'
-              : 'text-ink/75 hover:bg-white/80 hover:text-ink',
-          ]}
-        >
-          {item.label}
-        </a>
-      ))}
-    </nav>
+    <ul class="hidden items-center gap-7 md:flex">
+      {
+        nav.map((item) => (
+          <li><a href={hrefFor(item.href)} class="relative text-sm text-ink/80 transition hover:text-moss after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-moss after:transition-all hover:after:w-full">{item.label}</a></li>
+        ))
+      }
+    </ul>
 
-    <button
-      id="menu-button"
-      type="button"
-      class="grid size-11 place-items-center rounded-full border border-ink/10 bg-white/70 lg:hidden"
-      aria-controls="mobile-menu"
-      aria-expanded="false"
-      aria-label="メニューを開く"
-    >
-      <svg class="menu-open-icon size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-        <path d="M4 7h16M4 12h16M4 17h16" />
-      </svg>
-      <svg class="menu-close-icon hidden size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-        <path d="m6 6 12 12M18 6 6 18" />
-      </svg>
+    <button id="menu-toggle" type="button" class="rounded-lg border border-ink/15 px-4 py-2 text-sm font-medium text-ink md:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label={t('nav.ariaOpen')} data-open={t('nav.ariaOpen')} data-close={t('nav.ariaClose')}>
+      <span class="menu-text">MENU</span>
     </button>
-  </div>
+  </nav>
 
-  <div id="mobile-menu" class="hidden border-t border-ink/10 bg-paper lg:hidden">
-    <nav class="mx-auto grid max-w-7xl gap-1 px-5 py-5" aria-label="モバイルナビゲーション">
-      {nav.map((item) => (
-        <a
-          href={item.href}
-          aria-current={isActive(item.href) ? 'page' : undefined}
-          class:list={[
-            'rounded-xl px-4 py-3 text-base font-medium',
-            isActive(item.href) ? 'bg-moss text-white' : 'text-ink hover:bg-white',
-          ]}
-        >
-          {item.label}
-        </a>
-      ))}
-      <a href="/rules/" class="rounded-xl px-4 py-3 text-base font-medium text-ink hover:bg-white">公園のルール</a>
-    </nav>
+  <div id="mobile-menu" class="hidden border-t border-ink/10 bg-paper md:hidden">
+    <ul class="mx-auto max-w-7xl grid gap-1 px-5 py-4" aria-label={t('nav.ariaMobile')}>
+      {
+        nav.map((item) => (
+          <li><a href={hrefFor(item.href)} class="block rounded-xl px-3 py-3 text-base text-ink/90 hover:bg-white/70">{item.label}</a></li>
+        ))
+      }
+      <li><a href={localePath('/rules/', lang)} class="block rounded-xl px-3 py-3 text-base text-ink/90 hover:bg-white/70">{t('nav.rules')}</a></li>
+    </ul>
   </div>
 </header>
 
 <script>
-  const button = document.querySelector<HTMLButtonElement>('#menu-button');
-  const menu = document.querySelector<HTMLElement>('#mobile-menu');
-  const openIcon = button?.querySelector<HTMLElement>('.menu-open-icon');
-  const closeIcon = button?.querySelector<HTMLElement>('.menu-close-icon');
-
-  button?.addEventListener('click', () => {
-    const expanded = button.getAttribute('aria-expanded') === 'true';
-    button.setAttribute('aria-expanded', String(!expanded));
-    button.setAttribute('aria-label', expanded ? 'メニューを開く' : 'メニューを閉じる');
-    menu?.classList.toggle('hidden', expanded);
-    openIcon?.classList.toggle('hidden', !expanded);
-    closeIcon?.classList.toggle('hidden', expanded);
-    document.body.classList.toggle('menu-open', !expanded);
-  });
-
-  menu?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      button?.setAttribute('aria-expanded', 'false');
-      menu.classList.add('hidden');
-      openIcon?.classList.remove('hidden');
-      closeIcon?.classList.add('hidden');
-      document.body.classList.remove('menu-open');
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+      menu.classList.toggle('hidden');
+      toggle.setAttribute('aria-label', expanded ? (toggle.dataset.open ?? '') : (toggle.dataset.close ?? ''));
     });
-  });
+  }
 </script>

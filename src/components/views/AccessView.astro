@@ -1,0 +1,81 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import PageHero from '@/components/PageHero.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import Notice from '@/components/Notice.astro';
+import StationChooser from '@/components/StationChooser.astro';
+import ParkSchematic from '@/components/ParkSchematic.astro';
+import VisitorServices from '@/components/VisitorServices.astro';
+import GoogleRating from '@/components/GoogleRating.astro';
+import { useTranslations } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import { maps } from '@/data/site';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+const stations = t('access.stations') as [string, string, string, string][];
+---
+<BaseLayout lang={lang} title={t('access.title')} description={t('access.desc')}>
+  <Breadcrumbs items={[{ label: t('common.home'), href: '/' }, { label: t('access.crumb') }]} />
+  <PageHero
+    eyebrow={t('access.heroEyebrow')}
+    title={t('access.heroTitle')}
+    description={t('access.heroDesc')}
+    image="/images/station.webp"
+    imageSmall="/images/station-900.webp"
+    imageAlt={t('access.heroTitle')}
+  />
+
+  <section class="mx-auto max-w-7xl px-5 py-12 lg:px-8">
+    <div class="rounded-3xl border border-ink/10 bg-white/65 p-6 shadow-soft sm:p-8">
+      <p class="text-xs font-semibold tracking-[0.2em] text-moss">{t('access.mapEyebrow')}</p>
+      <h2 class="font-jp-serif mt-2 text-2xl tracking-wider">{t('access.mapTitle')}</h2>
+      <p class="mt-3 text-sm leading-7 text-muted">{t('access.mapDesc')}</p>
+      <div class="mt-6 aspect-[16/9] w-full overflow-hidden rounded-2xl">
+        <iframe title={t('access.mapTitle')} src={maps.embedSrc} class="size-full" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+      <p class="mt-4 text-xs leading-6 text-muted">{t('access.mapNote')}<a href="https://www.city.osaka.lg.jp/kensetsu/page/0000602554.html" target="_blank" rel="noopener noreferrer" class="font-semibold text-river-deep hover:text-moss">{t('access.mapNoteLink')}</a></p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <SectionHeading eyebrow={t('access.fromEyebrow')} title={t('access.fromTitle')} description={t('access.fromDesc')} />
+    <div class="mt-10 overflow-x-auto">
+      <table class="w-full min-w-[640px] border-collapse text-left text-sm">
+        <thead>
+          <tr class="border-b border-ink/15 text-xs tracking-wider text-muted">
+            <th class="py-3 pr-4 font-semibold">{t('access.thOrigin')}</th>
+            <th class="py-3 pr-4 font-semibold">{t('access.thRoute')}</th>
+            <th class="py-3 pr-4 font-semibold">{t('access.thAfter')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {stations.map(([from, best, copy, href]) => (
+            <tr class="border-b border-ink/10 align-top">
+              <td class="py-4 pr-4 font-semibold text-ink">{from}</td>
+              <td class="py-4 pr-4">
+                <p class="font-semibold text-ink">{best}</p>
+                <p class="mt-1 text-muted">{copy}</p>
+              </td>
+              <td class="py-4 pr-4"><a href={href} class="font-semibold text-river-deep hover:text-moss">{t('common.viewCourse')} →</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <StationChooser lang={lang} />
+  <ParkSchematic lang={lang} />
+  <VisitorServices lang={lang} />
+  <GoogleRating lang={lang} />
+
+  <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <div class="grid gap-5 lg:grid-cols-2">
+      <Notice title={t('access.notice1Title')} tone="river"><p>{t('access.notice1Body')}</p></Notice>
+      <Notice title={t('access.notice2Title')} tone="moss"><p>{t('access.notice2Body')}</p></Notice>
+    </div>
+  </section>
+</BaseLayout>

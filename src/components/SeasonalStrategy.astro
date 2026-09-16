@@ -1,0 +1,57 @@
+---
+import SectionHeading from '@/components/SectionHeading.astro';
+import { dataI18n } from '@/i18n/data';
+import { useTranslations } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+type Props = { lang?: Locale };
+const { lang = 'ja' } = Astro.props;
+const { t } = useTranslations(lang);
+
+const base = {
+  headerLabel: '項目',
+  seasons: ['春', '夏', '秋', '冬'],
+  rows: [
+    { label: '花暦・桜花', cells: ['染井吉野が約3月下旬〜4月上旬に満開。園内約4,800本の桜並木が主役に。', '新緑とアジサイ。川風が涼しく、朝の散歩に。', 'イチョウやハゼの黄葉。晴れの日の水辺が美しい。', '葉が落ちて視界が開き、静かな川の風景を。'] },
+    { label: '気象特徴', cells: ['開花前後は年によって前後。強風や花冷えに注意。', '高温多湿。ゲリラ豪雨や夕立、台風の影響も。', '秋雨前線や台風の季節。突風で橋が揺れることも。', '乾燥と北風。晴れの日が多く歩きやすいが、体感は冷たい。'] },
+    { label: '大川の水位・水質', cells: ['おおむね穏やか。満開時は人の「増水」（混雑）に注意。', '台風時は増水・濁水。立ち入り制限がかかることも。', '平常域。透明度は年間を通じて比較的安定。', '低水位で流れが緩やか。護岸の手入れの時期。'] },
+    { label: '野鳥・生物', cells: ['渡りのカモ類が減り、サギ類が増える。虫も活発に。', '水面にウミウやセグロカモメ。水辺の生物が最も活発。', '渡り鳥が飛来し始める。サギやカモの姿が増える。', '多くのカモ類やウミウが越冬。都心の川として貴重な姿。'] },
+    { label: 'おすすめの過ごし方', cells: ['平日の朝の桜散歩。橋の上から桜と大川を一望。', '朝夕の散歩と水分補給。美術館や駅前の食事と組み合わせて。', '紅葉と藤田美術館巡り。半日コースに入れやすい。', '晴れの日の静かな水辺。ベンチでゆっくり。'] },
+  ],
+  note: '気象庁の平年値（1991–2020）と国土交通省の河川観測、大阪市の公園管理実績をもとに、長期的な気候傾向としてまとめました。当年の開花状況や天候は、訪問前に公式発表をご確認ください。',
+};
+
+const data = lang === 'ja' ? base : (dataI18n[lang]?.seasonal ?? base);
+---
+<section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+  <SectionHeading
+    eyebrow={t('extra.courseSeasonalEyebrow')}
+    title={t('extra.courseSeasonalTitle')}
+    description={t('extra.courseSeasonalDesc')}
+  />
+
+  <div class="mt-12 overflow-x-auto rounded-3xl border border-ink/10 bg-white/65 shadow-soft">
+    <table class="w-full min-w-[640px] border-collapse text-sm">
+      <thead class="bg-paper/70">
+        <tr>
+          <th scope="col" class="px-5 py-4 text-left font-semibold text-muted">{data.headerLabel}</th>
+          {data.seasons.map((season: string) => <th scope="col" class="px-5 py-4 text-left font-semibold text-ink">{season}</th>)}
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-ink/10">
+        {
+          data.rows.map((row: { label: string; cells: string[] }) => (
+            <tr>
+              <th scope="row" class="px-5 py-4 align-top font-medium text-ink">{row.label}</th>
+              {row.cells.map((cell: string) => <td class="px-5 py-4 align-top leading-7 text-muted">{cell}</td>)}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <p class="mt-5 text-xs leading-6 text-muted">
+    <span class="font-semibold text-ink">{t('extra.courseSeasonalNoteLabel')}：</span>{data.note}
+  </p>
+</section>
