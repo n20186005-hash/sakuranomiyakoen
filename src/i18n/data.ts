@@ -243,6 +243,7 @@ export const dataI18n: Record<NonJa, any> = {
       { question: 'Can we have a barbecue?', answer: 'There is no designated BBQ area in the park, and open flames are not allowed. Take your trash home and follow on-site signs.' },
       { question: 'Can we walk with a stroller?', answer: 'The main riverside promenades are fairly easy, but bridge slopes and some garden paths have steps. Starting with the short 30-min course is reassuring.' },
       { question: 'Can I buy food in the park?', answer: 'There are no permanent kiosks or restaurants in the park. Buy and eat around Sakuranomiya Stn., OAP or Temmabashi before walking.' },
+      { question: 'Can we use handheld fireworks?', answer: 'Osaka City guidance prohibits fireworks that could harm or disturb others, and asks for care about noise and smoke. For the specific rules at Kema Sakuranomiya Park, please check with the nearest park management office. The park rules page is also helpful.' },
     ],
     quickFacts: [
       { label: 'Admission', value: 'Free', note: 'The park is free to use' },
@@ -576,6 +577,7 @@ export const dataI18n: Record<NonJa, any> = {
       { question: '可以烤肉嗎？', answer: '園內沒有可烤肉的指定區域，也不得使用火氣。垃圾請帶走，並遵守現場標示。' },
       { question: '推嬰兒車也能走嗎？', answer: '河岸主要步道相對好走，但橋的上下與部分園路有台階。從30分短程開始較安心。' },
       { question: '園內可以買到食物嗎？', answer: '園內沒有常設的販賣部或餐飲店。建議在櫻之宮站周邊或OAP、天滿橋周邊購買、用餐後再散步。' },
+      { question: '毛馬櫻之宮公園可以玩手持煙火嗎？', answer: '大阪市的說明中，可能對他人造成危害或困擾的煙火是被禁止的，並要求留意噪音與煙霧。毛馬櫻之宮公園的具體規定，請向最近的管理事務所確認。也可參考使用規則頁面。' },
     ],
     quickFacts: [
       { label: '入園費', value: '免費', note: '公園可自由利用' },
@@ -909,6 +911,7 @@ export const dataI18n: Record<NonJa, any> = {
       { question: '바비큐가 가능한가요?', answer: '공원 내 지정 BBQ 구역은 없으며 화기 사용은 불가합니다. 쓰레기는 가져가고 현장 안내를 따르세요.' },
       { question: '유모차로도 걸을 수 있나요?', answer: '강변 주요 산책로는 비교적 걷기 좋지만 다리 오르내림이나 일부 원로에 단차가 있습니다. 짧은 30분 코스부터 시작하면 안심입니다.' },
       { question: '공원 내에서 음식을 살 수 있나요?', answer: '공원 내 상설 매점이나 음식점은 없습니다. 사쿠라노미야역 주변이나 OAP, 템마바시 주변에서 구입·식사 후 걷는 것을 권장합니다.' },
+      { question: '게마 사쿠라노미야 공원에서手持烟花(손꽃놀이)는 가능한가요?', answer: '오사카시 안내에서는 타인에게 위해나 방해가 될 수 있는 불꽃놀이는 금지되며 소음·연기에 대한 배려를 요청합니다. 게마 사쿠라노미야 공원의 구체적 취급은 가장 가까운 관리 사무소에 확인하세요. 이용 규칙 페이지도 참고하세요.' },
     ],
     quickFacts: [
       { label: '입장료', value: '무료', note: '공원은 자유 이용' },
