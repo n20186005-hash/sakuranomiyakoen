@@ -308,8 +308,8 @@ export const attractions: Attraction[] = [
       '公園南部の休憩地点として使いやすく、藤田美術館や大阪城北詰駅への動線も良好です。園内ルールと開園案内に従ってください。',
     nearest: 'JR大阪城北詰駅',
     time: '20〜30分',
-    image: '/images/waterfront.webp',
-    imageAlt: '毛馬桜之宮公園の春の水辺',
+    image: '/images/fujita-garden.webp',
+    imageAlt: '藤田邸跡公園の紅葉と庭園の石橋',
   },
   {
     slug: 'museum',
@@ -322,6 +322,22 @@ export const attractions: Attraction[] = [
     time: '60分〜',
     image: '/images/museum.webp',
     imageAlt: '藤田美術館の入口と庭',
+  },
+  {
+    slug: 'mint-museum',
+    name: '造幣博物館', eyebrow: '貨幣と近代産業',
+    summary: '造幣局構内にある貨幣の歴史を紹介する博物館。大川沿いの近代建築散歩に組み合わせやすい場所です。',
+    details: '展示・入館方法・休館日は造幣局の公式案内を参照。桜の通り抜けの開催期間とは見学条件が異なります。',
+    nearest: 'JR大阪天満宮駅・Osaka Metro天満橋駅', time: '45〜90分',
+    image: '/images/mint-museum.webp', imageAlt: '大阪造幣博物館の歴史的な煉瓦建築',
+  },
+  {
+    slug: 'genpachi-bridge',
+    name: '源八橋', eyebrow: '大川の眺望',
+    summary: '桜ノ宮駅付近で大川を横断する橋。両岸の桜並木を見渡す散歩の起点です。',
+    details: '橋上からは河岸公園の広がりが見えます。車道と歩行者の動線に注意し、安全な場所から景色を楽しみましょう。',
+    nearest: 'JR桜ノ宮駅', time: '10〜20分',
+    image: '/images/bridge.webp', imageAlt: '大川に架かる源八橋と沿岸の桜',
   },
 ];
 

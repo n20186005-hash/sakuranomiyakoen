@@ -25,5 +25,6 @@ const c = t('comp.cards') as Record<string, string>;
       <div><dt class="inline text-muted">{c.nearest}：</dt><dd class="inline font-medium text-ink">{a.nearest}</dd></div>
       <div><dt class="inline text-muted">{c.time}：</dt><dd class="inline font-medium text-ink">{a.time}</dd></div>
     </dl>
+    <a href={lang === 'ja' ? `/nearby/${attraction.slug}/` : `/${lang}/nearby/${attraction.slug}/`} class="mt-5 inline-flex rounded-full border border-moss/30 px-5 py-2 text-sm font-semibold text-moss transition hover:bg-moss hover:text-white">{lang === 'en' ? 'Explore this place →' : lang === 'zh-tw' ? '查看景點詳情 →' : lang === 'ko' ? '명소 자세히 보기 →' : '詳しい見どころと行き方 →'}</a>
   </div>
 </article>
