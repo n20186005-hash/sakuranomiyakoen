@@ -13,8 +13,6 @@ import HistoryStories from '@/components/HistoryStories.astro';
 import GoogleRating from '@/components/GoogleRating.astro';
 import RestaurantCard from '@/components/RestaurantCard.astro';
 import ScienceResponsibility from '@/components/ScienceResponsibility.astro';
-import SourcesSection from '@/components/SourcesSection.astro';
-import Notice from '@/components/Notice.astro';
 import { attractions, restaurants, faq } from '@/data/site';
 import { useTranslations, localizeList, localePath } from '@/i18n/utils';
 import type { Locale } from '@/i18n/config';
@@ -113,11 +111,6 @@ const heroTitle = h.heroTitle as string[];
 
   <GoogleRating lang={lang} />
   <ScienceResponsibility lang={lang} />
-  <SourcesSection lang={lang} />
-
-  <section class="mx-auto max-w-3xl px-5 py-16 lg:px-8">
-    <Notice title={h.noticeTitle} tone="moss"><p>{h.noticeBody}</p></Notice>
-  </section>
 
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',

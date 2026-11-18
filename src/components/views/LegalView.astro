@@ -1,0 +1,71 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import SourcesSection from '@/components/SourcesSection.astro';
+import type { Locale } from '@/i18n/config';
+import { localePath } from '@/i18n/utils';
+
+type Kind = 'sources' | 'about' | 'privacy-policy' | 'terms-of-service' | 'cookie-settings';
+type Props = { lang?: Locale; kind: Kind };
+const { lang = 'ja', kind } = Astro.props;
+const dict = {
+  ja: {
+    sources: ['情報源', '公式機関の情報と更新', '公園・交通・気象の確認先を整理しています。'],
+    about: ['このサイトについて', '毛馬桜之宮公園の散歩ガイド', '本サイトは公的機関・施設と提携していない独立した観光情報ガイドです。'],
+    'privacy-policy': ['プライバシーポリシー', '個人情報とアクセス解析', '本サイトのデータ取り扱いについてご案内します。'],
+    'terms-of-service': ['利用規約', 'ご利用にあたって', '旅行情報と外部リンクの利用条件をまとめています。'],
+    'cookie-settings': ['Cookie 設定', 'アクセス解析の選択', '任意のアクセス解析 Cookie の利用を選択できます。'],
+    official: '公的情報・写真の出典', management: '本サイトは毛馬桜之宮公園の公式運営サイトではありません。大阪市の管理する公園と、個別の文化施設・店舗はそれぞれ管理主体が異なります。公園や施設の利用条件は各管理者の最新案内に従ってください。',
+    aboutDetails: '大川沿いの桜、駅からの行き方、散歩ルート、歴史建築、周辺の文化施設を紹介しています。写真の出典と情報の確認先はそれぞれ独立したページにまとめています。',
+    privacy: [['アクセス解析', 'Google Analytics 4 を利用する場合、訪問ページや端末の種別などの利用状況が処理されることがあります。任意の解析 Cookie は設定から変更できます。'], ['個人情報', '会員登録や投稿フォームはありません。本サイトが氏名・メールアドレスを直接収集することはありません。'], ['外部サイト', 'Google マップなどの外部リンク先には各サービスのプライバシーポリシーが適用されます。']],
+    terms: [['情報の性質', '公開情報を基にした旅行計画の参考資料です。開園、料金、交通、桜の状況は変動するため現地と管理者の案内を優先してください。'], ['外部リンク', '外部の地図や施設サイトの情報・サービスは各提供元の条件に従います。'], ['責任の範囲', '安全上の注意、立入制限、交通規則を守り、ご自身の状況に応じて旅行を判断してください。']],
+    cookieIntro: '必須のサイト表示機能とは別に、Google Analytics の解析用保存を許可するか選択できます。選択はこのブラウザに保存され、いつでも変更できます。', enable: '解析 Cookie を許可', disable: '解析 Cookie を拒否', current: '現在の選択', saved: '設定を保存しました', photoLink: '写真・情報について', sourcesLink: '情報源を見る',
+  },
+  en: {
+    sources: ['Sources', 'Official information and updates', 'References for park management, transport and weather.'], about: ['About this guide', 'Kema Sakuranomiya Park walking guide', 'An independent visitor guide with no affiliation to government or facility operators.'], 'privacy-policy': ['Privacy Policy', 'Privacy and analytics', 'How this guide handles data.'], 'terms-of-service': ['Terms of Service', 'Using this guide', 'Conditions for using travel information and external links.'], 'cookie-settings': ['Cookie Settings', 'Analytics preferences', 'Choose whether optional analytics cookies may be stored.'], official: 'Public information and photo sources', management: 'This is not the official website of Kema Sakuranomiya Park. The city manages the public park, while museums and other facilities have their own operators. Follow their current notices.', aboutDetails: 'Find riverside walks, cherry blossoms, station access, historic buildings and nearby museums. Sources and photo information are kept on separate pages.', privacy: [['Analytics', 'Google Analytics 4 may process page visits and device information. Optional analytics storage can be changed in Cookie Settings.'], ['Personal data', 'There is no account registration or submission form. We do not directly collect names or email addresses.'], ['External services', 'External sites such as Google Maps apply their own privacy policies.']], terms: [['Information', 'This is a planning reference based on public information. Hours, fees, transport and blossom conditions may change.'], ['External links', 'Maps and facility websites operate under their own terms.'], ['Responsibility', 'Observe posted restrictions, traffic rules and safety guidance when visiting.']], cookieIntro: 'Choose whether Google Analytics may use optional analytics storage in this browser. You can change your choice at any time.', enable: 'Allow analytics cookies', disable: 'Reject analytics cookies', current: 'Current preference', saved: 'Preference saved', photoLink: 'Photos and information', sourcesLink: 'View sources',
+  },
+  'zh-tw': {
+    sources: ['資訊來源', '官方資料與更新', '整理公園管理、交通及氣象的參考來源。'], about: ['關於本站', '毛馬櫻之宮公園散步指南', '本站為獨立旅遊資訊指南，與政府或設施管理單位沒有隸屬關係。'], 'privacy-policy': ['隱私政策', '個人資料與分析', '說明本站的資料處理方式。'], 'terms-of-service': ['服務條款', '使用本指南', '旅遊資訊及外部連結的使用條件。'], 'cookie-settings': ['Cookie 設定', '分析偏好設定', '選擇是否允許非必要的分析 Cookie。'], official: '官方資訊及照片來源', management: '本站不是毛馬櫻之宮公園官方網站。公共公園由大阪市管理，各文化設施則有各自的管理單位。請以現場及管理機構的最新公告為準。', aboutDetails: '本站介紹大川沿岸櫻花、車站交通、步行路線、歷史建築與附近文化設施；資料來源與照片說明另設獨立頁面。', privacy: [['流量分析', 'Google Analytics 4 可能處理瀏覽頁面及裝置資訊。非必要分析 Cookie 可於設定頁更改。'], ['個人資料', '本站沒有會員註冊或投稿表單，亦不直接收集姓名和電子郵件。'], ['外部網站', 'Google 地圖等外部網站適用各自的隱私政策。']], terms: [['資訊性質', '本指南依公開資料整理，開放時間、票價、交通與花況均可能變動。'], ['外部連結', '地圖及設施網站適用各服務提供者的使用條件。'], ['訪客責任', '請遵守現場限制、交通規則與安全指示。']], cookieIntro: '可選擇是否讓 Google Analytics 在此瀏覽器使用非必要的分析儲存功能，並可隨時更改。', enable: '允許分析 Cookie', disable: '拒絕分析 Cookie', current: '目前選擇', saved: '設定已儲存', photoLink: '照片與資訊說明', sourcesLink: '查看來源',
+  },
+  ko: {
+    sources: ['정보 출처', '공식 정보 및 업데이트', '공원 관리, 교통, 날씨 정보를 확인할 수 있는 자료입니다.'], about: ['사이트 소개', '게마 사쿠라노미야 공원 산책 가이드', '정부 또는 시설 운영 기관과 관계없는 독립 여행 정보 사이트입니다.'], 'privacy-policy': ['개인정보 처리방침', '개인정보와 분석', '이 사이트의 데이터 처리에 관한 안내입니다.'], 'terms-of-service': ['이용약관', '가이드 이용 안내', '여행 정보 및 외부 링크 사용 조건입니다.'], 'cookie-settings': ['Cookie 설정', '분석 사용 선택', '선택적 분석 쿠키의 사용 여부를 지정할 수 있습니다.'], official: '공식 정보 및 사진 출처', management: '이 사이트는 게마 사쿠라노미야 공원의 공식 웹사이트가 아닙니다. 공공 공원은 오사카시가 관리하며 박물관 등 각 시설에는 별도의 운영 주체가 있습니다.', aboutDetails: '오카와 강변의 벚꽃, 역 접근, 산책 코스, 역사적 건축물과 주변 문화 시설을 안내합니다. 출처와 사진 정보는 별도 페이지에 정리했습니다.', privacy: [['방문 분석', 'Google Analytics 4는 방문 페이지와 기기 정보를 처리할 수 있습니다. 선택적 분석 쿠키는 설정에서 변경할 수 있습니다.'], ['개인정보', '회원 가입이나 제출 양식이 없으며 이름과 이메일 주소를 직접 수집하지 않습니다.'], ['외부 사이트', 'Google 지도 등 외부 서비스에는 각자의 개인정보 처리방침이 적용됩니다.']], terms: [['정보', '공개 자료를 바탕으로 한 여행 참고 정보입니다. 운영 시간, 요금, 교통, 개화 상태는 변경될 수 있습니다.'], ['외부 링크', '지도와 시설 사이트에는 해당 제공자의 약관이 적용됩니다.'], ['방문 안전', '현장 통제, 교통 규칙 및 안전 지침을 따르세요.']], cookieIntro: '이 브라우저에서 Google Analytics의 선택적 분석 저장을 허용할지 선택할 수 있습니다. 언제든 변경할 수 있습니다.', enable: '분석 쿠키 허용', disable: '분석 쿠키 거부', current: '현재 설정', saved: '설정 저장됨', photoLink: '사진 및 정보', sourcesLink: '출처 보기',
+  },
+} as const;
+
+const t = dict[lang];
+const [eyebrow, title, description] = t[kind];
+---
+<BaseLayout lang={lang} title={title} description={description}>
+  <Breadcrumbs items={[{ label: title }]} />
+  {kind === 'sources' ? (
+    <>
+      <SourcesSection lang={lang} />
+      <section class="mx-auto max-w-5xl px-5 pb-14 lg:px-8"><a href="https://parksgreenery.city.osaka.lg.jp/article/parks-sakuranomiya/" target="_blank" rel="noopener noreferrer" class="text-moss underline">大阪市公園案内 ↗</a><p class="mt-5 text-muted"><a href={localePath('/about/', lang)} class="underline">{t.about[0]}</a> · <a href="/credits/" class="underline">{t.photoLink}</a></p></section>
+    </>
+  ) : (
+    <main class="mx-auto max-w-5xl px-5 py-16 lg:px-8">
+      <p class="text-sm font-semibold tracking-widest text-moss">{eyebrow.toUpperCase()}</p>
+      <h1 class="font-jp-serif mt-4 text-4xl text-ink">{title}</h1>
+      <p class="mt-6 text-lg leading-8 text-muted">{description}</p>
+      {kind === 'about' && <section class="mt-12 space-y-5 rounded-3xl bg-white/70 p-8 leading-8"><h2 class="text-2xl font-semibold">{t.about[0]}</h2><p>{t.management}</p><p>{t.aboutDetails}</p><a href={localePath('/sources/', lang)} class="inline-block text-moss underline">{t.sourcesLink} ↗</a></section>}
+      {kind === 'privacy-policy' && <div class="mt-12 grid gap-5">{t.privacy.map(([heading, body]) => <section class="rounded-3xl bg-white/70 p-7"><h2 class="text-xl font-semibold">{heading}</h2><p class="mt-3 leading-8 text-muted">{body}</p></section>)}</div>}
+      {kind === 'terms-of-service' && <div class="mt-12 grid gap-5">{t.terms.map(([heading, body]) => <section class="rounded-3xl bg-white/70 p-7"><h2 class="text-xl font-semibold">{heading}</h2><p class="mt-3 leading-8 text-muted">{body}</p></section>)}</div>}
+      {kind === 'cookie-settings' && <section class="mt-12 rounded-3xl bg-white/70 p-8"><p class="leading-8">{t.cookieIntro}</p><p class="mt-6 text-sm text-muted">{t.current}: <strong id="cookie-status" aria-live="polite">—</strong></p><div class="mt-5 flex flex-wrap gap-3"><button type="button" id="cookie-allow" class="rounded-full bg-moss px-6 py-3 font-medium text-white">{t.enable}</button><button type="button" id="cookie-deny" class="rounded-full border border-ink/20 px-6 py-3 font-medium text-ink">{t.disable}</button></div><p id="cookie-feedback" aria-live="polite" class="mt-4 text-sm text-moss"></p></section>}
+    </main>
+  )}
+{kind === 'cookie-settings' && <script is:inline define:vars={{ enabled: t.enable, disabled: t.disable, saved: t.saved }}>
+  const status = document.getElementById('cookie-status');
+  const feedback = document.getElementById('cookie-feedback');
+  const read = () => localStorage.getItem('sakuranomiya-analytics-consent') === 'granted';
+  const render = () => { if (status) status.textContent = read() ? enabled : disabled; };
+  const save = (choice) => {
+    localStorage.setItem('sakuranomiya-analytics-consent', choice);
+    if (typeof window.gtag === 'function') window.gtag('consent', 'update', { analytics_storage: choice });
+    render();
+    if (feedback) feedback.textContent = saved;
+  };
+  document.getElementById('cookie-allow')?.addEventListener('click', () => save('granted'));
+  document.getElementById('cookie-deny')?.addEventListener('click', () => save('denied'));
+  render();
+</script>}
+</BaseLayout>
