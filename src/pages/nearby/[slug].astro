@@ -1,0 +1,223 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import PageHero from '@/components/PageHero.astro';
+import { attractions } from '@/data/site';
+
+const guide: Record<string, { address: string; mapQuery: string; background: string; focus: string[]; route: string[]; photo: string; access: string; management: string; official: string }> = {
+  sakura: {
+    address: '大阪府大阪市都島区・北区 大川沿い', mapQuery: '毛馬桜之宮公園 大川 桜並木 大阪',
+    background: '大川の両岸に連なる桜並木は、毛馬桜之宮公園を代表する風景です。長い河岸公園のため、駅周辺と天満橋方面では橋や水辺の見え方が変わります。',
+    focus: ['源八橋から川の両岸を見比べる', '川面に映る桜と船を重ねて撮る', '開花ピークには立ち止まる場所を選び、通行を妨げない'],
+    route: ['JR桜ノ宮駅から大川へ', '源八橋周辺で河岸を眺める', '南へ桜並木を歩き、体力に合わせて引き返す'],
+    photo: '朝は水面の反射、夕方は橋のシルエットが印象的です。花見の混雑時は歩道の中央での撮影を避けましょう。',
+    access: 'JR大阪環状線「桜ノ宮駅」から河岸へ徒歩でアクセス。公園は南北に長いため、訪れる区間によって最寄り駅が異なります。',
+    management: '大阪市の公園として管理される大川沿いの公共空間です。催事・園路の利用ルールは管理者の現地掲示を優先してください。',
+    official: 'https://www.city.osaka.lg.jp/',
+  },
+  beach: {
+    address: '大阪府大阪市都島区中野町 大川河川敷', mapQuery: '桜ノ宮ビーチ 大阪',
+    background: '大川沿いの都市公園に設けられた砂浜エリア。桜並木の景観とは異なる、水辺に近い開放的な空間を楽しめます。',
+    focus: ['砂浜と対岸の市街地を一枚に収める', '水辺の活動やイベントの案内を確認する', '増水・強風時は水際に近づかない'],
+    route: ['JR桜ノ宮駅から川沿いへ', '園路を通って砂浜エリアへ', '源八橋方面へ戻り、橋上から大川を眺める'],
+    photo: '砂浜の奥行きと対岸の建物を組み合わせると、都市の中のビーチらしさが伝わります。利用者の写り込みには配慮してください。',
+    access: 'JR桜ノ宮駅から大川方面へ徒歩。砂浜への出入口や利用可能範囲は現地案内で確認してください。',
+    management: '河川敷・公園の利用は関係管理者のルールに従います。遊泳可能な場所であると解釈しないでください。',
+    official: 'https://www.city.osaka.lg.jp/',
+  },
+  hall: {
+    address: '大阪府大阪市北区天満橋1丁目1-1', mapQuery: '旧桜宮公会堂 大阪',
+    background: '明治期の造幣寮関連建築の意匠を受け継ぐ石造玄関が特徴的な建物。現在は催事・婚礼などに利用され、歴史建築が現役の施設として残る姿を見られます。',
+    focus: ['重厚な石造玄関の柱と彫刻を見る', '近隣の泉布観と建築の印象を比較する', '施設利用者の動線や貸切案内に配慮する'],
+    route: ['桜ノ宮駅から大川右岸を南下', '旧桜宮公会堂の外観を見る', '隣接する泉布観へ歩く'],
+    photo: '正面玄関の対称性が伝わる位置を探すと建築の輪郭を捉えやすくなります。敷地内での撮影条件は施設に確認してください。',
+    access: 'JR桜ノ宮駅から南へ歩くルート。大川のどちら側を歩いているか確認し、橋の位置から経路を選んでください。',
+    management: '現在は民間の利用施設で、公園とは公開時間や立ち入り範囲が異なります。内部見学や食事は施設の最新案内をご確認ください。',
+    official: 'https://www.city.osaka.lg.jp/',
+  },
+  sempukan: {
+    address: '大阪府大阪市北区天満橋1丁目1-1 付近', mapQuery: '泉布観 大阪',
+    background: '泉布観は明治初期に造幣寮の応接施設として建てられた洋風建築です。大阪の近代化や造幣局の歴史をたどる際に重要な建物です。',
+    focus: ['洋風の列柱とベランダの構成を見る', '旧桜宮公会堂との用途・年代の違いを知る', '内部公開日と通常の外観見学を区別する'],
+    route: ['旧桜宮公会堂側から外観を観察', '泉布観の柱・窓の配置を見る', '大川の遊歩道へ戻る'],
+    photo: '建物の全景と植栽を組み合わせると季節感が出ます。立入制限や周辺利用者への配慮を優先してください。',
+    access: 'JR桜ノ宮駅から大川沿いを南へ。旧桜宮公会堂と合わせた短時間の建築散歩に向いています。',
+    management: '文化財に関する情報と公開案内は大阪市などの管理機関の告知を確認してください。常時内部に入れる施設ではありません。',
+    official: 'https://www.city.osaka.lg.jp/',
+  },
+  'fujita-garden': {
+    address: '大阪府大阪市都島区網島町', mapQuery: '藤田邸跡公園 大阪',
+    background: '藤田家ゆかりの庭園の面影を伝える公園。大川の河岸散歩から落ち着いた緑の空間へと気分を切り替えられます。',
+    focus: ['庭園の池や植栽の構成を観察する', '季節ごとに変わる葉や水面を撮る', '藤田美術館と歴史的背景をつなげて考える'],
+    route: ['大阪城北詰駅側から公園へ', '庭園内をゆっくり一周', '藤田美術館または大川沿いへ移動'],
+    photo: '庭園の奥行きが伝わる小径や水辺を選びましょう。庭園の植物や施設を傷つけないようにしてください。',
+    access: 'JR東西線「大阪城北詰駅」から徒歩圏。公園南部の散歩や美術館と組み合わせやすい場所です。',
+    management: '公共の庭園・公園エリアです。開園時間や一部閉鎖については現地掲示および大阪市の最新情報を確認してください。',
+    official: 'https://www.city.osaka.lg.jp/',
+  },
+  museum: {
+    address: '大阪府大阪市都島区網島町10-32', mapQuery: '藤田美術館 大阪',
+    background: '藤田家の美術コレクションを中心に、日本・東洋の美術作品に親しめる美術館。大川沿いの自然散歩と屋内鑑賞をつなぐ訪問先です。',
+    focus: ['展示のテーマと作品解説を読む', '現代的な美術館建築と周辺庭園を比べる', '展示替えや休館日を事前に調べる'],
+    route: ['JR大阪城北詰駅から美術館へ', '企画・展示内容に合わせて鑑賞', '藤田邸跡公園へ立ち寄り大川へ'],
+    photo: '建築外観を撮影する場合も通行を妨げないように。館内の撮影可否は展示ごとの案内に従ってください。',
+    access: 'JR東西線「大阪城北詰駅」から徒歩圏。鑑賞時間を確保したい場合は散歩の前後に訪れる順番を決めましょう。',
+    management: '藤田美術館が運営する美術施設です。開館時間・料金・展示と撮影ルールは美術館の公式案内が優先されます。',
+    official: 'https://fujita-museum.or.jp/',
+  },
+  'mint-museum': {
+    address: '大阪府大阪市北区天満1丁目1-79', mapQuery: '造幣博物館 大阪 造幣局',
+    background: '造幣局の歴史と貨幣製造の歩みを紹介する博物館。明治期の造幣事業の発展を知ることで、近くの泉布観や旧桜宮公会堂の背景も立体的に理解できます。',
+    focus: ['貨幣の製造技術と展示を比較する', '煉瓦造の建築意匠を見る', '季節行事と通常の博物館公開を区別する'],
+    route: ['天満橋駅方面から造幣局へ', '公式の入口案内に従って博物館を見学', '泉布観・大川沿いへ歩く'],
+    photo: '外観の煉瓦壁と木々を一緒に写すと歴史的な雰囲気が出ます。館内の撮影可否は展示ごとの掲示に従ってください。',
+    access: '天満橋駅またはJR大阪天満宮駅から徒歩。造幣局の公式アクセス案内で一般見学入口を確認してください。',
+    management: '独立行政法人造幣局の博物館です。展示、開館・入館条件は造幣局の公式案内に従ってください。',
+    official: 'https://www.mint.go.jp/',
+  },
+  'genpachi-bridge': {
+    address: '大阪府大阪市都島区中野町・北区天満橋 大川', mapQuery: '源八橋 大阪',
+    background: '源八橋は大川の両岸を結ぶ橋で、毛馬桜之宮公園の川辺の広がりを一度に眺められる場所です。桜ノ宮駅から短時間でも立ち寄りやすい景観ポイントです。',
+    focus: ['橋から上流と下流の景色を比較する', '対岸の桜並木と水面の構図を観察する', '歩行者の通行を優先して撮影する'],
+    route: ['JR桜ノ宮駅から大川へ', '源八橋の歩道で景色を見る', '対岸の遊歩道または桜ノ宮ビーチ方面へ'],
+    photo: '橋の上から川の流れと両岸を収めると、大川の景観が伝わります。路上に三脚を広げたり長時間立ち止まったりしないでください。',
+    access: 'JR大阪環状線「桜ノ宮駅」から徒歩。駅の出口と橋の歩道を地図で確認してください。',
+    management: '道路橋です。公園設備とは管理区分が異なるため、交通規則と現地の案内を守ってください。',
+    official: 'https://www.city.osaka.lg.jp/',
+  },
+};
+
+// 各地点に固有の歴史・建築・訪問条件を補足。施設の動的情報は公式サイトへ誘導する。
+const depth: Record<string, { history: string; design: string; visit: string; hours: string; price: string; stay: string }> = {
+  sakura: {
+    history: '大川沿いは古くから大阪の水運と結びついてきた場所です。現在の毛馬桜之宮公園は毛馬洗い堰から天満橋までの河川敷を利用した長い公園で、桜の並木と川の景観が一体になっています。大阪市の公園資料では周辺の泉布観や造幣局と組み合わせた散策も紹介されています。',
+    design: '河川の両岸に続く細長い公園で、一定の広場に見どころが集まるタイプではありません。橋を境に視界が開き、対岸を眺めることで桜並木の連続性が分かります。',
+    visit: '短時間なら桜ノ宮駅から源八橋の往復、長く歩くなら南の桜宮橋・天満橋方面へ。満開期の週末は駅周辺が混み合うため、朝の時間帯にゆとりを持ちましょう。',
+    hours: '公園の一般的な園路は自由に散策可能。催事・工事による一部規制は現地掲示を確認。', price: '公園散策は無料。周辺施設やイベントは別条件。', stay: '桜だけなら約30〜60分。建築・美術館と合わせる場合は半日を確保すると回りやすくなります。',
+  },
+  beach: {
+    history: '「大阪ふれあいの水辺」として整備された河岸の砂浜エリアです。桜の名所として知られる公園の中で、水辺に接する体験を中心にした特色があります。',
+    design: '自然海岸ではなく都市河川の水辺空間。砂浜、舗装された園路、対岸のビル群が隣接しており、都市の水辺整備を観察する場所としても興味深いエリアです。',
+    visit: '水辺の足元は天候や増水の影響を受けます。砂浜の利用範囲と活動ルールは現場案内に従い、遊泳可能と決めつけないでください。',
+    hours: '公園内の公開エリアですが、催事・保全作業・河川状況によって利用制限があります。', price: '通常の河岸散策は無料。イベント・特定の活動は個別確認。', stay: '水辺の景色を楽しむなら20〜40分。源八橋と組み合わせて短い散歩にできます。',
+  },
+  hall: {
+    history: '旧桜宮公会堂の特徴的な正面玄関は、明治期の造幣寮関連施設の建築を引き継いだものです。大阪の産業近代化を物語る建築として、近くの泉布観と見比べると歴史のつながりが分かります。',
+    design: '大きな石柱と彫刻のある古典的な正面ファサードが見どころ。現在の建物全体と保存された玄関部分を同一年代の建築と誤解しないよう、外観の素材・意匠の違いにも注目できます。',
+    visit: '外観の見学と館内利用は分けて計画してください。婚礼やイベントで貸切となる日もあるため、入館・食事の予定がある場合は施設へ直接確認しましょう。',
+    hours: '外観を公共空間から眺めることと、館内への入場は別。営業・貸切状況は施設案内を確認。', price: '外観鑑賞は通常無料。食事・催事は施設の案内によります。', stay: '建物の外観は10〜15分。泉布観と合わせて30分程度の建築散策が可能です。',
+  },
+  sempukan: {
+    history: '泉布観は1871年に旧造幣寮の応接所として竣工した洋風建築で、翌1872年の明治天皇の訪問に際して名付けられました。大阪市は現存する大阪最古の洋風建築と紹介しています。',
+    design: '建物を囲むベランダと列柱が特徴です。和風の庭園・周辺の近代建築と比較すると、明治初期に導入された洋風意匠の特徴を観察できます。',
+    visit: '通常の散歩では外観を中心に見学し、内部公開は大阪市の特別公開情報を確認してください。内部に入れる前提で当日の予定を組まないことが大切です。',
+    hours: '内部は常時公開ではありません。大阪市の特別公開日・受付条件を確認。', price: '外観鑑賞は公共の通行可能範囲から。内部公開時の条件は主催者の案内に従う。', stay: '外観10〜15分。旧桜宮公会堂と組み合わせると建築比較ができます。',
+  },
+  'fujita-garden': {
+    history: '藤田邸跡公園は、実業家・藤田伝三郎にゆかりのある旧邸宅の庭園を一般に開放した場所です。近代大阪の実業家の生活文化を伝える庭園として、隣接する藤田美術館と合わせて理解できます。',
+    design: '人工的な起伏、池、石組み、植栽を組み合わせた日本庭園。河川敷の直線的な遊歩道とは異なり、曲がる小径や眺めの変化を楽しむ構成です。',
+    visit: '庭園は一般の河岸園路と公開時間が異なる場合があります。早朝・夜間に大川を歩く予定なら、庭園への立ち寄りは別に確認しておきましょう。',
+    hours: '庭園の開放時間を大阪市・現地掲示で確認。河岸公園の自由散策とは区別。', price: '一般の公園利用は無料。個別イベントは案内を確認。', stay: '20〜30分を目安に園内を散策。藤田美術館と組み合わせるならさらに鑑賞時間が必要です。',
+  },
+  museum: {
+    history: '藤田美術館は、藤田家が蒐集した日本・東洋の美術品を公開する施設です。河岸公園や旧藤田邸庭園を歩いた後に訪れると、庭園と美術品に共通する文化的背景を感じられます。',
+    design: '現在の美術館は明るく開放的な現代建築で、近隣の泉布観や旧桜宮公会堂とは異なる時代のデザインが対比できます。展示空間では作品ごとの照明や見せ方にも注目してください。',
+    visit: '展示替え・休館日があるため、鑑賞したい作品や企画がある場合は公式サイトで予定を確認しましょう。雨の日には屋内の文化散歩にも向いています。',
+    hours: '美術館の公式カレンダーで開館・休館日と最終入場を確認。', price: '展示観覧料は美術館の最新料金表を参照。', stay: '展示を見るなら60分以上を確保。庭園と合わせて90分程度から計画できます。',
+  },
+  'mint-museum': {
+    history: '造幣博物館は日本の近代造幣事業の歩みと貨幣の歴史を伝える施設です。大阪造幣局の敷地には明治以来の産業史が残り、近隣の泉布観と関連付けると理解が深まります。',
+    design: '赤煉瓦を用いた歴史的な建物が見どころ。展示では古銭、貨幣製造技術、記念貨幣などの変遷をたどれます。',
+    visit: '造幣局の一般見学入口と、春の「桜の通り抜け」の入口・入場条件は同じとは限りません。出発前に博物館の公式アクセスを確認してください。',
+    hours: '開館日・受付時間・入場方法は造幣局公式サイトで確認。', price: '入場条件や特別企画の扱いは造幣局の最新案内を参照。', stay: '展示鑑賞は45〜90分。泉布観や大川の散歩を加えると半日コースになります。',
+  },
+  'genpachi-bridge': {
+    history: '源八橋は桜ノ宮駅付近で大川を渡る橋で、河川公園の南北の景色をつなぐ場所です。橋の上から眺めると、両岸に広がる桜並木と都市の水辺が一体に見えます。',
+    design: '橋上の視点は河岸の園路より高く、川のカーブや船の動きを見渡せます。橋の構造そのものだけでなく、川と道路、鉄道駅を結ぶ都市の動線にも注目できます。',
+    visit: '車道のある橋です。撮影のために歩道をふさいだり車道側に出たりせず、混雑する花見時期は短時間の立ち寄りを心がけてください。',
+    hours: '道路橋として通行可能ですが、工事・交通規制に従ってください。', price: '歩行者の通行は無料。', stay: '展望は10〜20分。桜ノ宮ビーチと桜並木の散策をつなげると楽しめます。',
+  },
+};
+
+export function getStaticPaths() {
+  return ['sakura', 'beach', 'hall', 'sempukan', 'fujita-garden', 'museum', 'mint-museum', 'genpachi-bridge'].map((slug) => ({ params: { slug }, props: { attraction: attractions.find((a) => a.slug === slug)! } }));
+}
+
+const { attraction } = Astro.props as { attraction: (typeof attractions)[number] };
+const info = guide[attraction.slug];
+const detail = depth[attraction.slug];
+const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(info.mapQuery)}`;
+const related = attractions.filter((a) => a.slug !== attraction.slug).slice(0, 3);
+const description = `${attraction.name}の見どころ、背景、アクセス、散歩ルート、撮影ポイントと訪問前の注意点。毛馬桜之宮公園周辺を歩くための個別ガイド。`;
+const schema = { '@context': 'https://schema.org', '@type': 'TouristAttraction', name: attraction.name, description, address: { '@type': 'PostalAddress', streetAddress: info.address, addressLocality: '大阪市', addressRegion: '大阪府', addressCountry: 'JP' }, url: `https://sakuranomiyakoen.com/nearby/${attraction.slug}/`, hasMap: mapUrl };
+---
+<BaseLayout title={`${attraction.name}｜見どころ・アクセス・散歩ガイド`} description={description} image={attraction.image} jsonLd={schema}>
+  <Breadcrumbs items={[{ label: 'ホーム', href: '/' }, { label: '周辺の見どころ', href: '/nearby/' }, { label: attraction.name }]} />
+  <PageHero eyebrow={attraction.eyebrow} title={attraction.name} description={attraction.summary} image={attraction.image} imageAlt={attraction.imageAlt} />
+  <main class="mx-auto max-w-5xl space-y-14 px-5 py-14 lg:px-8">
+    <section class="rounded-3xl bg-white/70 p-7 shadow-soft sm:p-10">
+      <p class="text-sm font-semibold tracking-widest text-moss">EXPLORE</p>
+      <h2 class="font-jp-serif mt-3 text-3xl">この場所を歩く</h2>
+      <p class="mt-5 leading-8 text-ink/80">{info.background}</p>
+      <h3 class="mt-8 text-xl font-semibold">訪問のヒント</h3>
+      <p class="mt-3 leading-8 text-muted">{detail.visit}</p>
+      <h3 class="mt-8 text-xl font-semibold">景観と文化の特徴</h3>
+      <p class="mt-3 leading-8 text-muted">{detail.design}</p>
+    </section>
+    <section>
+      <p class="text-sm font-semibold tracking-widest text-moss">ABOUT & MANAGEMENT</p>
+      <h2 class="font-jp-serif mt-3 text-3xl">この場所について・管理主体</h2>
+      <p class="mt-4 leading-8">{info.management}</p>
+      <p class="mt-4 leading-8 text-muted">{detail.history}</p>
+      <a class="mt-4 inline-block text-moss underline underline-offset-4" href={info.official} target="_blank" rel="noopener noreferrer">管理・施設情報の確認先 ↗</a>
+    </section>
+    <section>
+      <h2 class="font-jp-serif text-3xl">基本情報</h2>
+      <dl class="mt-6 grid gap-4 rounded-3xl border border-ink/10 bg-white/65 p-7 sm:grid-cols-2">
+        <div><dt class="text-sm text-muted">所在地</dt><dd class="mt-1 font-semibold">{info.address}</dd></div>
+        <div><dt class="text-sm text-muted">最寄り駅</dt><dd class="mt-1 font-semibold">{attraction.nearest}</dd></div>
+        <div><dt class="text-sm text-muted">見学の目安</dt><dd class="mt-1 font-semibold">{attraction.time}（移動時間別）</dd></div>
+        <div><dt class="text-sm text-muted">公開状況</dt><dd class="mt-1">{detail.hours}</dd></div>
+        <div><dt class="text-sm text-muted">入場料金</dt><dd class="mt-1">{detail.price}</dd></div>
+        <div><dt class="text-sm text-muted">滞在プラン</dt><dd class="mt-1">{detail.stay}</dd></div>
+      </dl>
+    </section>
+    <section>
+      <h2 class="font-jp-serif text-3xl">アクセスと地図</h2>
+      <p class="mt-4 leading-8">{info.access}</p>
+      <a class="mt-6 inline-flex rounded-full bg-moss px-6 py-3 font-semibold text-white" href={mapUrl} target="_blank" rel="noopener noreferrer">{attraction.name}を Google マップで探す ↗</a>
+      <p class="mt-3 text-sm text-muted">各スポット名で検索する地図リンクです。訪問前に正確な入口・経路を確認してください。</p>
+    </section>
+    <section>
+      <h2 class="font-jp-serif text-3xl">歴史・景観の観察ポイント</h2>
+      <p class="mt-4 leading-8 text-muted">{detail.history}</p>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-3">{info.focus.map((item, i) => <li class="rounded-2xl border border-ink/10 bg-white/65 p-5"><span class="text-sm font-semibold text-moss">0{i + 1}</span><p class="mt-3 leading-7">{item}</p></li>)}</ul>
+    </section>
+    <section>
+      <h2 class="font-jp-serif text-3xl">おすすめ散歩ルート</h2>
+      <ol class="mt-6 space-y-4">{info.route.map((step, i) => <li class="flex items-start gap-4 rounded-2xl bg-white/65 p-5"><span class="font-jp-serif text-2xl text-moss">{i + 1}</span><span class="pt-1 leading-7">{step}</span></li>)}</ol>
+    </section>
+    <section>
+      <h2 class="font-jp-serif text-3xl">写真の撮り方と訪問前の注意</h2>
+      <p class="mt-4 leading-8">{info.photo}</p>
+      <p class="mt-4 leading-8 text-muted">開放・イベント・施設営業の状況は変わります。公園と施設で利用条件が異なるため、当日の公式案内と現地掲示を確認してください。</p>
+    </section>
+    <section>
+      <h2 class="font-jp-serif text-3xl">周辺に泊まってゆっくり歩く</h2>
+      <p class="mt-4 leading-8 text-muted">{detail.stay} 宿泊を伴う場合は大阪駅・京橋駅・天満橋駅周辺など、翌日の移動先に合う鉄道駅を起点に検討すると便利です。</p>
+    </section>
+    <section>
+      <h2 class="font-jp-serif text-3xl">訪問者の評価を調べる</h2>
+      <p class="mt-4 leading-8 text-muted">施設・景観の感じ方は季節や訪問時間によって変わります。現在の評価や個別の口コミは、この地点の Google マップ検索結果からご確認ください。ここでは未確認の点数・口コミ数を掲載していません。</p>
+      <a href={mapUrl} target="_blank" rel="noopener noreferrer" class="mt-4 inline-block text-moss underline underline-offset-4">Google マップで口コミを見る ↗</a>
+    </section>
+    <section>
+      <h2 class="font-jp-serif text-3xl">よくある質問</h2>
+      <div class="mt-6 space-y-5"><div><h3 class="font-semibold">どの駅から行くと便利ですか？</h3><p class="mt-2 text-muted">{info.access}</p></div><div><h3 class="font-semibold">いつでも見学できますか？</h3><p class="mt-2 text-muted">公園と施設では利用条件が異なります。公開日・料金・催事予定は現地および管理者の案内を確認してください。</p></div><div><h3 class="font-semibold">周辺も一緒に歩けますか？</h3><p class="mt-2 text-muted">大川沿いの遊歩道と近くの文化施設を組み合わせられます。移動時間を別に確保しましょう。</p></div></div>
+    </section>
+    <section>
+      <h2 class="font-jp-serif text-3xl">近くの見どころ</h2>
+      <div class="mt-6 grid gap-5 sm:grid-cols-3">{related.map((a) => <a class="overflow-hidden rounded-2xl border border-ink/10 bg-white/65 transition hover:shadow-soft" href={`/nearby/${a.slug}/`}><img src={a.image} alt={a.imageAlt} loading="lazy" class="aspect-[16/10] w-full object-cover" /><div class="p-5"><h3 class="font-semibold">{a.name}</h3><p class="mt-2 text-sm text-muted">{a.summary}</p></div></a>)}</div>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,64 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import PageHero from '@/components/PageHero.astro';
+import { attractions } from '@/data/site';
+import { localize, localePath } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+const copy = {
+  en: {
+    back: 'Nearby highlights', overview: 'Explore this place', about: 'About the site and its management', basic: 'Visitor information', access: 'Access and map', observe: 'What to look for', route: 'Suggested walking route', photo: 'Photography and visitor tips', faq: 'Before you visit', related: 'Continue exploring', address: 'Location', station: 'Nearest station', duration: 'Suggested visit', hours: 'Opening and admission', verify: 'Confirm opening, admission and event conditions with the facility or on-site notices.', map: 'Find this place on Google Maps', mapNote: 'The link searches for this specific place. Confirm the exact entrance before travelling.', q1: 'How do I get there?', q2: 'Can I visit at any time?', q3: 'What else is nearby?', a2: 'Public parks and individual facilities have different access conditions. Check current official information.', a3: 'Combine a short riverside walk with the nearby cultural sights below.', manage: 'For operating hours, temporary restrictions and access rules, follow the relevant park or facility operator’s notices.', photoTip: 'Photograph from safe public paths without blocking traffic or other visitors.', plan: ['Check the entrance and current access conditions', 'Explore the main features and viewpoints', 'Continue along the Okawa or return to the nearest station'],
+    names: { 'mint-museum': ['Osaka Mint Museum', 'Learn about Japan’s coins and the history of the Mint in a historic building near the Okawa.', 'The museum is operated by the Japan Mint. Check its official visiting arrangements.'], 'genpachi-bridge': ['Genpachi Bridge', 'A bridge near JR Sakuranomiya Station with wide views of the Okawa and its cherry-lined banks.', 'The bridge is a public road crossing. Keep walkways clear while viewing the river.'] },
+  },
+  'zh-tw': {
+    back: '周邊景點', overview: '探索景點', about: '景點背景與管理單位', basic: '基本資料', access: '交通與地圖', observe: '觀察重點', route: '建議步行路線', photo: '攝影與遊覽提醒', faq: '出發前常見問題', related: '繼續探索周邊', address: '所在地', station: '最近車站', duration: '建議停留', hours: '開放與門票', verify: '開放時間、入場規定及活動資訊請以管理單位與現場公告為準。', map: '在 Google 地圖搜尋此景點', mapNote: '此連結依景點名稱獨立搜尋，出發前請確認實際入口。', q1: '怎麼前往？', q2: '可以隨時參觀嗎？', q3: '附近還能去哪裡？', a2: '公共公園和各個設施的開放規定不同，請查看最新官方資訊。', a3: '可將大川河岸散步與下列文化景點安排在同一路線。', manage: '營運時間、臨時限制及入場規則以公園或設施管理單位的公告為準。', photoTip: '請在安全的公共步道拍照，不妨礙其他遊客及交通。', plan: ['確認入口與當日開放資訊', '參觀主要看點並觀察景觀', '沿大川繼續散步或返回最近車站'],
+    names: { 'mint-museum': ['造幣博物館', '了解日本貨幣與造幣局歷史的博物館，適合結合大川沿岸的近代建築散步。', '博物館由日本造幣局管理，請查閱官方入館資訊。'], 'genpachi-bridge': ['源八橋', '位於 JR 櫻之宮站附近，可眺望大川和兩岸櫻花步道的橋梁。', '此處是道路橋梁，觀景時請保持行人通道暢通。'] },
+  },
+  ko: {
+    back: '주변 명소', overview: '이 장소 둘러보기', about: '장소 소개와 관리 주체', basic: '기본 정보', access: '교통 및 지도', observe: '관찰 포인트', route: '추천 도보 코스', photo: '촬영 및 방문 안내', faq: '방문 전 자주 묻는 질문', related: '주변 명소 더 보기', address: '위치', station: '가까운 역', duration: '권장 관람 시간', hours: '운영 및 입장', verify: '운영 시간, 입장 조건, 행사 일정은 시설과 현장 공지를 확인하세요.', map: 'Google 지도에서 이 장소 찾기', mapNote: '이 장소 이름으로 개별 검색합니다. 출발 전 정확한 입구를 확인하세요.', q1: '어떻게 가나요?', q2: '언제든 방문할 수 있나요?', q3: '주변에는 무엇이 있나요?', a2: '공원과 각 시설의 운영 조건은 다릅니다. 최신 공식 정보를 확인하세요.', a3: '오카와 강변 산책과 아래 문화 명소를 함께 둘러볼 수 있습니다.', manage: '운영 시간과 출입 제한 등은 공원 또는 시설 관리 주체의 최신 안내를 따르세요.', photoTip: '안전한 공공 보행로에서 다른 방문객과 교통을 방해하지 않고 촬영하세요.', plan: ['입구와 당일 운영 정보를 확인', '주요 특징과 전망을 관찰', '오카와 강변을 따라 걷거나 가까운 역으로 돌아가기'],
+    names: { 'mint-museum': ['오사카 조폐박물관', '오카와 강변의 역사적인 건물에서 일본의 화폐와 조폐 역사를 살펴보는 박물관입니다.', '일본 조폐국이 운영하며 공식 관람 안내를 확인해야 합니다.'], 'genpachi-bridge': ['겐파치 다리', 'JR 사쿠라노미야역 부근에서 오카와 강과 양쪽 벚꽃 산책로를 조망할 수 있는 다리입니다.', '도로 교량이므로 경치를 볼 때 보행 통로를 비워 주세요.'] },
+  },
+} as const;
+
+const destinations: Record<string, { query: string; address: string; official: string }> = {
+  sakura: { query: '毛馬桜之宮公園 大川 桜並木 大阪', address: '大阪市都島区・北区 大川沿い', official: 'https://parksgreenery.city.osaka.lg.jp/article/parks-sakuranomiya/' },
+  beach: { query: '桜ノ宮ビーチ 大阪', address: '大阪市都島区中野町 大川河川敷', official: 'https://www.city.osaka.lg.jp/' },
+  hall: { query: '旧桜宮公会堂 大阪', address: '大阪市北区天満橋1丁目1-1', official: 'https://www.city.osaka.lg.jp/' },
+  sempukan: { query: '泉布観 大阪', address: '大阪市北区天満橋1丁目1-1 付近', official: 'https://www.city.osaka.lg.jp/keizaisenryaku/page/0000651702.html' },
+  'fujita-garden': { query: '藤田邸跡公園 大阪', address: '大阪市都島区網島町', official: 'https://www.city.osaka.lg.jp/' },
+  museum: { query: '藤田美術館 大阪', address: '大阪市都島区網島町10-32', official: 'https://fujita-museum.or.jp/access/' },
+  'mint-museum': { query: '造幣博物館 大阪 造幣局', address: '大阪市北区天満1丁目1-79', official: 'https://www.mint.go.jp/' },
+  'genpachi-bridge': { query: '源八橋 大阪', address: '大阪市都島区中野町・北区天満橋 大川', official: 'https://www.city.osaka.lg.jp/' },
+};
+
+export function getStaticPaths() {
+  return (['en', 'zh-tw', 'ko'] as const).flatMap((lang) => attractions.map((attraction) => ({ params: { lang, slug: attraction.slug }, props: { lang, attraction } })));
+}
+
+const { lang, attraction } = Astro.props as { lang: Exclude<Locale, 'ja'>; attraction: (typeof attractions)[number] };
+const t = copy[lang];
+const a = localize('attractions', attraction, lang);
+const custom = t.names[attraction.slug as keyof typeof t.names] as readonly string[] | undefined;
+const name = custom?.[0] ?? a.name;
+const summary = custom?.[1] ?? a.summary;
+const details = custom?.[2] ?? a.details;
+const dest = destinations[attraction.slug];
+const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dest.query)}`;
+const related = attractions.filter((x) => x.slug !== a.slug).slice(0, 3).map((x) => localize('attractions', x, lang));
+---
+<BaseLayout lang={lang} title={name} description={summary} image={a.image}>
+  <Breadcrumbs items={[{ label: t.back, href: `/${lang}/nearby/` }, { label: name }]} />
+  <PageHero eyebrow={a.eyebrow} title={name} description={summary} image={a.image} imageAlt={a.imageAlt} />
+  <main class="mx-auto max-w-5xl space-y-14 px-5 py-14 lg:px-8">
+    <section class="rounded-3xl bg-white/70 p-7 shadow-soft sm:p-10"><p class="text-sm font-semibold tracking-widest text-moss">EXPLORE</p><h2 class="font-jp-serif mt-3 text-3xl">{t.overview}</h2><p class="mt-5 leading-8">{summary}</p><p class="mt-4 leading-8 text-muted">{details}</p></section>
+    <section><p class="text-sm font-semibold tracking-widest text-moss">ABOUT</p><h2 class="font-jp-serif mt-3 text-3xl">{t.about}</h2><p class="mt-4 leading-8">{custom?.[2] ?? t.manage}</p><a class="mt-4 inline-block text-moss underline" href={dest.official} target="_blank" rel="noopener noreferrer">Official information ↗</a></section>
+    <section><h2 class="font-jp-serif text-3xl">{t.basic}</h2><dl class="mt-6 grid gap-4 rounded-3xl border border-ink/10 bg-white/65 p-7 sm:grid-cols-2"><div><dt class="text-sm text-muted">{t.address}</dt><dd class="font-semibold">{dest.address}, Japan</dd></div><div><dt class="text-sm text-muted">{t.station}</dt><dd>{a.nearest}</dd></div><div><dt class="text-sm text-muted">{t.duration}</dt><dd>{a.time}</dd></div><div><dt class="text-sm text-muted">{t.hours}</dt><dd>{t.verify}</dd></div></dl></section>
+    <section><h2 class="font-jp-serif text-3xl">{t.access}</h2><p class="mt-4 leading-8">{a.nearest} — {t.plan[0]}.</p><a href={mapUrl} target="_blank" rel="noopener noreferrer" class="mt-5 inline-flex rounded-full bg-moss px-6 py-3 font-semibold text-white">{t.map} ↗</a><p class="mt-3 text-sm text-muted">{t.mapNote}</p></section>
+    <section><h2 class="font-jp-serif text-3xl">{t.observe}</h2><p class="mt-4 leading-8">{details}</p></section>
+    <section><h2 class="font-jp-serif text-3xl">{t.route}</h2><ol class="mt-6 space-y-4">{t.plan.map((step, i) => <li class="flex gap-4 rounded-2xl bg-white/65 p-5"><span class="text-xl font-semibold text-moss">{i + 1}</span><span>{step}</span></li>)}</ol></section>
+    <section><h2 class="font-jp-serif text-3xl">{t.photo}</h2><p class="mt-4 leading-8">{t.photoTip} {t.verify}</p></section>
+    <section><h2 class="font-jp-serif text-3xl">{t.faq}</h2><div class="mt-5 space-y-5"><div><h3 class="font-semibold">{t.q1}</h3><p class="mt-2 text-muted">{a.nearest}. {t.mapNote}</p></div><div><h3 class="font-semibold">{t.q2}</h3><p class="mt-2 text-muted">{t.a2}</p></div><div><h3 class="font-semibold">{t.q3}</h3><p class="mt-2 text-muted">{t.a3}</p></div></div></section>
+    <section><h2 class="font-jp-serif text-3xl">{t.related}</h2><div class="mt-6 grid gap-5 sm:grid-cols-3">{related.map((x) => <a href={localePath(`/nearby/${x.slug}/`, lang)} class="overflow-hidden rounded-2xl border border-ink/10 bg-white/65"><img src={x.image} alt={x.imageAlt} loading="lazy" class="aspect-[16/10] w-full object-cover" /><div class="p-5"><h3 class="font-semibold">{x.name}</h3><p class="mt-2 text-sm text-muted">{x.summary}</p></div></a>)}</div></section>
+  </main>
+</BaseLayout>

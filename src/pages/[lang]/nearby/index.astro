@@ -1,0 +1,27 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import AttractionCard from '@/components/AttractionCard.astro';
+import { attractions } from '@/data/site';
+import type { Locale } from '@/i18n/config';
+
+const content = {
+  en: ['PLACES & HISTORY', 'Explore the Okawa riverside', 'From cherry-lined paths and a riverside beach to Meiji architecture, a Japanese garden and museums. Discover eight distinctive places within and near Kema Sakuranomiya Park.'],
+  'zh-tw': ['景點與歷史', '探索大川沿岸的景點', '從櫻花步道、河岸沙灘，到明治建築、日本庭園及美術館，認識毛馬櫻之宮公園周邊八處各具特色的地點。'],
+  ko: ['명소와 역사', '오카와 강변의 명소', '벚꽃 산책로와 강변 해변, 메이지 시대 건축물, 일본 정원과 박물관까지. 게마 사쿠라노미야 공원 주변의 여덟 장소를 만나보세요.'],
+} as const;
+
+export function getStaticPaths() {
+  return (['en', 'zh-tw', 'ko'] as const).map((lang) => ({ params: { lang }, props: { lang } }));
+}
+const { lang } = Astro.props as { lang: Exclude<Locale, 'ja'> };
+const [eyebrow, title, description] = content[lang];
+---
+<BaseLayout lang={lang} title={title} description={description}>
+  <PageHero eyebrow={eyebrow} title={title} description={description} image="/images/sempukan.webp" imageAlt="Historic Sembukan building by the Okawa" />
+  <main class="mx-auto max-w-7xl px-5 py-14 lg:px-8">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {attractions.map((attraction, index) => <AttractionCard attraction={attraction} index={index} lang={lang} />)}
+    </div>
+  </main>
+</BaseLayout>

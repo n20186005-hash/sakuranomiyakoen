@@ -49,7 +49,7 @@ const heroTitle = h.heroTitle as string[];
     />
     <p class="mx-auto mt-6 max-w-3xl text-center leading-8 text-muted">{h.aboutP}</p>
     <div class="mt-8 text-center">
-      <a href="/nearby/" class="inline-flex items-center gap-2 font-medium text-river-deep underline underline-offset-4 hover:text-river">{h.aboutLink} <span aria-hidden="true">→</span></a>
+      <a href={l('/nearby/')} class="inline-flex items-center gap-2 font-medium text-river-deep underline underline-offset-4 hover:text-river">{h.aboutLink} <span aria-hidden="true">→</span></a>
     </div>
   </section>
 
@@ -59,7 +59,7 @@ const heroTitle = h.heroTitle as string[];
       {attractions.map((attraction, index) => <AttractionCard attraction={attraction} index={index} lang={lang} />)}
     </div>
     <div class="mt-8 text-center">
-      <a href="/nearby/" class="inline-flex items-center gap-2 font-medium text-river-deep underline underline-offset-4 hover:text-river">{h.placesLink} <span aria-hidden="true">→</span></a>
+      <a href={l('/nearby/')} class="inline-flex items-center gap-2 font-medium text-river-deep underline underline-offset-4 hover:text-river">{h.placesLink} <span aria-hidden="true">→</span></a>
     </div>
   </section>
 
