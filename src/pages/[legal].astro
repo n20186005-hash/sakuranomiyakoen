@@ -1,0 +1,9 @@
+---
+import LegalView from '@/components/views/LegalView.astro';
+const legalSlugs = ['sources', 'about', 'privacy-policy', 'terms-of-service', 'cookie-settings'] as const;
+export function getStaticPaths() {
+  return ['sources', 'about', 'privacy-policy', 'terms-of-service', 'cookie-settings'].map((legal) => ({ params: { legal }, props: { legal } }));
+}
+const { legal } = Astro.props as { legal: 'sources' | 'about' | 'privacy-policy' | 'terms-of-service' | 'cookie-settings' };
+---
+<LegalView kind={legal} />

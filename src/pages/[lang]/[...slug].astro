@@ -6,6 +6,7 @@ import RulesView from '@/components/views/RulesView.astro';
 import SakuraView from '@/components/views/SakuraView.astro';
 import CourseView from '@/components/views/CourseView.astro';
 import GourmetView from '@/components/views/GourmetView.astro';
+import LegalView from '@/components/views/LegalView.astro';
 import type { Locale } from '@/i18n/config';
 
 const views: Record<string, any> = {
@@ -17,10 +18,11 @@ const views: Record<string, any> = {
   course: CourseView,
   gourmet: GourmetView,
 };
+const legalSlugs = ['sources', 'about', 'privacy-policy', 'terms-of-service', 'cookie-settings'] as const;
 
 export function getStaticPaths() {
   const langs: Locale[] = ['en', 'zh-tw', 'ko'];
-  const slugs = ['', 'access', 'faq', 'rules', 'sakura', 'course', 'gourmet'];
+  const slugs = ['', 'access', 'faq', 'rules', 'sakura', 'course', 'gourmet', 'sources', 'about', 'privacy-policy', 'terms-of-service', 'cookie-settings'];
   return langs.flatMap((lang) =>
     slugs.map((slug) => ({ params: { lang, slug }, props: { lang } }))
   );
@@ -32,3 +34,4 @@ const View = views[slug ?? ''];
 ---
 
 {View && <View lang={lang} />}
+{legalSlugs.includes(slug as any) && <LegalView lang={lang} kind={slug as any} />}

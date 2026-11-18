@@ -15,25 +15,26 @@ const baseSources = [
   { title: 'Osaka Metro / JR西日本', body: '駅・アクセス・運行状況の公式情報。' },
 ];
 const sources = lang === 'ja' ? baseSources : (dataI18n[lang]?.sources ?? baseSources);
-const credits = lang === 'ja'
-  ? { title: '写真提供', license: '一部クリエイティブ・コモンズ等の写真を利用' }
-  : (dataI18n[lang]?.photoCredits ?? { title: '写真提供', license: '一部クリエイティブ・コモンズ等の写真を利用' });
+const officialUrls = [
+  'https://www.kkr.mlit.go.jp/yodogawa/',
+  'https://parksgreenery.city.osaka.lg.jp/article/parks-sakuranomiya/',
+  'https://www.jma.go.jp/bosai/forecast/',
+  'https://subway.osakametro.co.jp/',
+];
 ---
 <section class="mx-auto max-w-5xl px-5 py-20 lg:px-8">
   <SectionHeading eyebrow={t('extra.sourcesEyebrow')} title={t('extra.sourcesTitle')} description={t('extra.sourcesDesc')} />
 
   <div class="mt-12 grid gap-5 sm:grid-cols-2">
     {
-      sources.map((source: { title: string; body: string }) => (
+      sources.map((source: { title: string; body: string }, i: number) => (
         <article class="rounded-3xl border border-ink/10 bg-white/65 p-7 shadow-soft">
           <h2 class="font-jp-serif text-lg tracking-wider text-ink">{source.title}</h2>
           <p class="mt-3 text-sm leading-7 text-muted">{source.body}</p>
+          <a href={officialUrls[i]} target="_blank" rel="noopener noreferrer" class="mt-4 inline-block text-sm font-semibold text-moss underline underline-offset-4">{source.title} ↗</a>
         </article>
       ))
     }
   </div>
 
-  <p class="mt-8 text-sm leading-7 text-muted">
-    <span class="font-semibold text-ink">{credits.title}：</span>{credits.license}
-  </p>
 </section>

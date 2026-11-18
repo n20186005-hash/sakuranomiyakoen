@@ -93,6 +93,12 @@ const xDefaultHref = new URL(basePath, site.url).toString();
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+      gtag('consent', 'default', { analytics_storage: 'denied' });
+      try {
+        if (localStorage.getItem('sakuranomiya-analytics-consent') === 'granted') {
+          gtag('consent', 'update', { analytics_storage: 'granted' });
+        }
+      } catch (_) {}
       gtag('config', 'G-HXM22WWPKP', { anonymize_ip: true });
     </script>
   </head>

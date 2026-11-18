@@ -14,7 +14,7 @@ const hrefFor = (href: string) => (href === '/nearby/' ? href : localePath(href,
       KEMA<span class="text-moss">桜之宮</span>
     </a>
 
-    <ul class="hidden items-center gap-7 md:flex">
+    <ul class="hidden items-center gap-4 md:flex lg:gap-6">
       {
         nav.map((item) => (
           <li><a href={hrefFor(item.href)} class="relative text-sm text-ink/80 transition hover:text-moss after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-moss after:transition-all hover:after:w-full">{item.label}</a></li>
