@@ -74,9 +74,9 @@ export const maps = {
 // Google マップのユーザー評価。ページ表示専用（JSON-LD には含めない）。
 export const reviews = {
   rating: 4.2,
-  count: 2614,
+  count: 2633,
   source: 'Google Maps',
-  syncMonth: '2026年9月',
+  syncMonth: '2026年11月',
   mapsUrl: 'https://maps.app.goo.gl/WqSy28cwQsen5dFHA',
 };
 
